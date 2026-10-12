@@ -1,0 +1,488 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================================================
+    // GLOBAL SECURITY INVARIANTS & HELPER FUNCTIONS
+    // =========================================================================
+
+    function isAuthenticated() {
+      return request.auth != null && request.auth.uid != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function userDocExists(uid) {
+      return exists(/databases/$(database)/documents/users/$(uid));
+    }
+
+    function getUserDoc(uid) {
+      return get(/databases/$(database)/documents/users/$(uid)).data;
+    }
+
+    // Role check leveraging custom claims with fallback to Firestore user document
+    function hasRoleClaim(roleName) {
+      return 'role' in request.auth.token && request.auth.token.role == roleName;
+    }
+
+    function isAdminClaim() {
+      return ('admin' in request.auth.token && request.auth.token.admin == true) ||
+             hasRoleClaim('admin') ||
+             hasRoleClaim('incharge');
+    }
+
+    function isIncharge() {
+      return isAuthenticated() && (
+        isAdminClaim() ||
+        (userDocExists(request.auth.uid) && getUserDoc(request.auth.uid).role == 'incharge')
+      );
+    }
+
+    function isProctor() {
+      return isAuthenticated() && (
+        hasRoleClaim('proctor') ||
+        (userDocExists(request.auth.uid) && getUserDoc(request.auth.uid).role == 'proctor')
+      );
+    }
+
+    function isStudent() {
+      return isAuthenticated() && (
+        hasRoleClaim('student') ||
+        (userDocExists(request.auth.uid) && getUserDoc(request.auth.uid).role == 'student')
+      );
+    }
+
+    // Proctor assignment checks
+    function isStudentAssignedToProctor(studentData, studentUid) {
+      return isProctor() && (
+        ('proctorId' in studentData && studentData.proctorId == request.auth.uid) ||
+        (
+          userDocExists(request.auth.uid) &&
+          'assignedStudents' in getUserDoc(request.auth.uid) &&
+          (
+            studentUid in getUserDoc(request.auth.uid).assignedStudents ||
+            ('rollNumber' in studentData && studentData.rollNumber in getUserDoc(request.auth.uid).assignedStudents)
+          )
+        )
+      );
+    }
+
+    // =========================================================================
+    // DOMAIN VALIDATION HELPERS (TYPE SAFETY & DOS / RESOURCE BOUNDS)
+    // =========================================================================
+
+    function isValidUserData(data) {
+      return (
+        data.role is string &&
+        (data.role in ['student', 'proctor', 'incharge']) &&
+        (!('name' in data) || (data.name is string && data.name.size() <= 100)) &&
+        (!('email' in data) || (data.email is string && data.email.size() <= 128)) &&
+        (!('rollNumber' in data) || (data.rollNumber is string && data.rollNumber.size() <= 50)) &&
+        (!('department' in data) || (data.department is string && data.department.size() <= 100)) &&
+        (!('yearSection' in data) || (data.yearSection is string && data.yearSection.size() <= 50)) &&
+        (!('proctorId' in data) || data.proctorId == null || (data.proctorId is string && data.proctorId.size() <= 128)) &&
+        (!('assignedStudents' in data) || (data.assignedStudents is list && data.assignedStudents.size() <= 500))
+      );
+    }
+
+    function isValidSystemConfig(data) {
+      return (
+        (!('minAttendanceThreshold' in data) || (
+          (data.minAttendanceThreshold is float || data.minAttendanceThreshold is int) &&
+          data.minAttendanceThreshold >= 0 &&
+          data.minAttendanceThreshold <= 100
+        )) &&
+        (!('staleThresholdDays' in data) || (data.staleThresholdDays is int && data.staleThresholdDays >= 1 && data.staleThresholdDays <= 365)) &&
+        (!('allowedEventCategories' in data) || (data.allowedEventCategories is list && data.allowedEventCategories.size() <= 50)) &&
+        (!('updatedBy' in data) || (data.updatedBy is string && data.updatedBy.size() <= 128))
+      );
+    }
+
+    function isValidStudentAttendance(data, rollNumber) {
+      return (
+        data.rollNumber is string &&
+        data.rollNumber == rollNumber &&
+        data.rollNumber.size() <= 50 &&
+        data.classesConducted is int &&
+        data.classesConducted >= 0 &&
+        data.classesAttended is int &&
+        data.classesAttended >= 0 &&
+        data.classesAttended <= data.classesConducted &&
+        (!('attendancePercentage' in data) || data.attendancePercentage == null || (
+          (data.attendancePercentage is float || data.attendancePercentage is int) &&
+          data.attendancePercentage >= 0 &&
+          data.attendancePercentage <= 100
+        )) &&
+        (!('studentUid' in data) || data.studentUid == null || (data.studentUid is string && data.studentUid.size() <= 128)) &&
+        (!('studentName' in data) || (data.studentName is string && data.studentName.size() <= 100)) &&
+        (!('department' in data) || (data.department is string && data.department.size() <= 100)) &&
+        (!('yearSection' in data) || (data.yearSection is string && data.yearSection.size() <= 50)) &&
+        (!('importId' in data) || (data.importId is string && data.importId.size() <= 128))
+      );
+    }
+
+    function isValidAttendanceImport(data) {
+      return (
+        data.fileName is string && data.fileName.size() <= 255 &&
+        data.totalRows is int && data.totalRows >= 0 &&
+        data.validRows is int && data.validRows >= 0 &&
+        data.invalidRows is int && data.invalidRows >= 0 &&
+        (!('status' in data) || (data.status is string && data.status.size() <= 50)) &&
+        (!('importedBy' in data) || (data.importedBy is string && data.importedBy.size() <= 100)) &&
+        (!('importedByUid' in data) || (data.importedByUid is string && data.importedByUid.size() <= 128))
+      );
+    }
+
+    function isValidEventRequestData(data) {
+      return (
+        data.studentUid is string && data.studentUid.size() <= 128 &&
+        data.status is string && data.status.size() <= 50 &&
+        (!('requestId' in data) || (data.requestId is string && data.requestId.size() <= 128)) &&
+        (!('referenceNumber' in data) || (data.referenceNumber is string && data.referenceNumber.size() <= 128)) &&
+        (!('eventTitle' in data) || (data.eventTitle is string && data.eventTitle.size() <= 200)) &&
+        (!('eventName' in data) || (data.eventName is string && data.eventName.size() <= 200)) &&
+        (!('organizer' in data) || (data.organizer is string && data.organizer.size() <= 200)) &&
+        (!('eventType' in data) || (data.eventType is string && data.eventType.size() <= 100)) &&
+        (!('category' in data) || (data.category is string && data.category.size() <= 100)) &&
+        (!('department' in data) || (data.department is string && data.department.size() <= 100)) &&
+        (!('yearSection' in data) || (data.yearSection is string && data.yearSection.size() <= 50)) &&
+        (!('rollNumber' in data) || (data.rollNumber is string && data.rollNumber.size() <= 50)) &&
+        (!('studentRollNumber' in data) || (data.studentRollNumber is string && data.studentRollNumber.size() <= 50)) &&
+        (!('studentName' in data) || (data.studentName is string && data.studentName.size() <= 100)) &&
+        (!('venue' in data) || (data.venue is string && data.venue.size() <= 200)) &&
+        (!('city' in data) || (data.city is string && data.city.size() <= 100)) &&
+        (!('startDate' in data) || (data.startDate is string && data.startDate.size() <= 50)) &&
+        (!('endDate' in data) || (data.endDate is string && data.endDate.size() <= 50)) &&
+        (!('purpose' in data) || (data.purpose is string && data.purpose.size() <= 2000)) &&
+        (!('proctorId' in data) || data.proctorId == null || (data.proctorId is string && data.proctorId.size() <= 128)) &&
+        (!('description' in data) || (data.description is string && data.description.size() <= 2000)) &&
+        (!('proctorRemarks' in data) || (data.proctorRemarks is string && data.proctorRemarks.size() <= 2000)) &&
+        (!('finalDecisionRemarks' in data) || (data.finalDecisionRemarks is string && data.finalDecisionRemarks.size() <= 2000)) &&
+        (!('inchargeRemarks' in data) || (data.inchargeRemarks is string && data.inchargeRemarks.size() <= 2000)) &&
+        (!('overrideReason' in data) || (data.overrideReason is string && data.overrideReason.size() <= 1000)) &&
+        (!('hasAttendanceOverride' in data) || data.hasAttendanceOverride is bool) &&
+        (!('overrideFlag' in data) || data.overrideFlag is bool) &&
+        (!('hasOverlappingEvents' in data) || data.hasOverlappingEvents is bool)
+      );
+    }
+
+    function isValidHistoryData(data) {
+      return (
+        (!('action' in data) || (data.action is string && data.action.size() <= 100)) &&
+        (!('status' in data) || (data.status is string && data.status.size() <= 50)) &&
+        (!('fromStatus' in data) || (data.fromStatus is string && data.fromStatus.size() <= 50)) &&
+        (!('toStatus' in data) || (data.toStatus is string && data.toStatus.size() <= 50)) &&
+        (!('remarks' in data) || (data.remarks is string && data.remarks.size() <= 1000)) &&
+        (!('performedBy' in data) || (data.performedBy is string && data.performedBy.size() <= 128)) &&
+        (!('performedByRole' in data) || (data.performedByRole is string && data.performedByRole.size() <= 50))
+      );
+    }
+
+    // =========================================================================
+    // EVENT REQUEST TRANSITION & ROLE VALIDATORS
+    // =========================================================================
+
+    function isInitialStudentRequest(data) {
+      return (
+        data.studentUid == request.auth.uid &&
+        (data.status in ['Draft', 'Submitted']) &&
+        // Student cannot set proctor recommendation or final decision fields upon creation
+        (!('proctorRecommendation' in data) || data.proctorRecommendation == null || data.proctorRecommendation == '') &&
+        (!('proctorRemarks' in data) || data.proctorRemarks == null || data.proctorRemarks == '') &&
+        (!('finalDecision' in data) || data.finalDecision == null || data.finalDecision == '') &&
+        (!('inchargeRemarks' in data) || data.inchargeRemarks == null || data.inchargeRemarks == '') &&
+        (!('overrideFlag' in data) || data.overrideFlag == false || data.overrideFlag == null) &&
+        isValidEventRequestData(data)
+      );
+    }
+
+    function isAuthorizedStudentUpdate(prev, next, diff) {
+      return (
+        // Must be the owner student
+        prev.studentUid == request.auth.uid &&
+        next.studentUid == prev.studentUid &&
+        (!('createdAt' in prev) || next.createdAt == prev.createdAt) &&
+        // Allowed transitions: Draft or Returned for Correction -> Draft, Submitted, Withdrawn
+        // Or transitioning to Withdrawn from an active non-final status
+        (
+          (prev.status in ['Draft', 'Returned for Correction'] && next.status in ['Draft', 'Submitted', 'Withdrawn']) ||
+          (next.status == 'Withdrawn' && !(prev.status in ['Approved', 'Rejected', 'Withdrawn']))
+        ) &&
+        // Student CANNOT approve or reject their own request
+        !(next.status in ['Approved', 'Rejected']) &&
+        // Student CANNOT modify recommendation or final decision fields
+        !diff.hasAny([
+          'finalDecision',
+          'inchargeRemarks',
+          'decisionAt',
+          'decidedBy',
+          'overrideFlag',
+          'overrideReason',
+          'proctorRecommendation',
+          'proctorRemarks',
+          'proctorReviewedAt',
+          'proctorReviewerId'
+        ]) &&
+        isValidEventRequestData(next)
+      );
+    }
+
+    function isAuthorizedProctorUpdate(prev, next, diff) {
+      return (
+        isProctor() &&
+        'proctorId' in prev &&
+        prev.proctorId == request.auth.uid &&
+        next.studentUid == prev.studentUid &&
+        next.proctorId == prev.proctorId &&
+        (!('createdAt' in prev) || next.createdAt == prev.createdAt) &&
+        // Proctor transition statuses
+        (next.status in [
+          'Under Proctor Review',
+          'Recommended for Approval',
+          'Recommended for Rejection',
+          'Returned for Correction'
+        ]) &&
+        // Proctor CANNOT issue final decision (acceptance test invariant)
+        !(next.status in ['Approved', 'Rejected']) &&
+        // Proctor CANNOT touch final decision fields or alter original request details
+        !diff.hasAny([
+          'finalDecision',
+          'finalDecisionRemarks',
+          'inchargeRemarks',
+          'decisionAt',
+          'decidedBy',
+          'finalDecidedBy',
+          'finalDecidedAt',
+          'hasAttendanceOverride',
+          'overrideFlag',
+          'overrideReason',
+          'studentUid',
+          'rollNumber',
+          'studentRollNumber',
+          'eventTitle',
+          'eventName',
+          'eventType',
+          'category'
+        ]) &&
+        isValidEventRequestData(next)
+      );
+    }
+
+    function isAuthorizedInchargeUpdate(prev, next) {
+      return (
+        isIncharge() &&
+        next.studentUid == prev.studentUid &&
+        (!('createdAt' in prev) || next.createdAt == prev.createdAt) &&
+        (next.status in [
+          'Draft',
+          'Submitted',
+          'Under Proctor Review',
+          'Recommended for Approval',
+          'Recommended for Rejection',
+          'Returned for Correction',
+          'Approved',
+          'Rejected',
+          'Withdrawn'
+        ]) &&
+        isValidEventRequestData(next)
+      );
+    }
+
+    function canReadParentEventRequest(requestId) {
+      return isAuthenticated() && (
+        isIncharge() ||
+        (
+          exists(/databases/$(database)/documents/event_requests/$(requestId)) && (
+            get(/databases/$(database)/documents/event_requests/$(requestId)).data.studentUid == request.auth.uid ||
+            (
+              isProctor() &&
+              get(/databases/$(database)/documents/event_requests/$(requestId)).data.proctorId == request.auth.uid
+            )
+          )
+        )
+      );
+    }
+
+    // =========================================================================
+    // ROOT DEFAULT DENY
+    // =========================================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // =========================================================================
+    // 1. USERS COLLECTION
+    // =========================================================================
+    match /users/{userId} {
+      // Any authenticated user can read their own profile.
+      // Proctor can read profiles of students in their assignedStudents.
+      // In-charge can read all.
+      allow read: if isAuthenticated() && (
+        request.auth.uid == userId ||
+        isIncharge() ||
+        isStudentAssignedToProctor(resource.data, userId)
+      );
+
+      // In-charge can write (create/update/delete) user profiles with schema validation
+      allow create, update: if isIncharge() && isValidUserData(request.resource.data);
+      allow delete: if isIncharge();
+    }
+
+    // =========================================================================
+    // 2. SYSTEM CONFIG COLLECTION
+    // =========================================================================
+    match /system_config/{configId} {
+      // All authenticated users can read attendance rules & policies
+      allow read: if isAuthenticated();
+
+      // Only In-Charge can write system configuration
+      allow create, update: if isIncharge() && isValidSystemConfig(request.resource.data);
+      allow delete: if isIncharge();
+    }
+
+    // =========================================================================
+    // 3. STUDENT ATTENDANCE COLLECTION
+    // =========================================================================
+    match /student_attendance/{rollNumber} {
+      // Student can read their own roll number record.
+      // Proctor can read assigned students.
+      // In-Charge can read all records.
+      allow read: if isAuthenticated() && (
+        isIncharge() ||
+        // Student reading own record
+        (
+          ('studentUid' in resource.data && resource.data.studentUid == request.auth.uid) ||
+          ('rollNumber' in request.auth.token && request.auth.token.rollNumber == rollNumber) ||
+          (
+            userDocExists(request.auth.uid) &&
+            'rollNumber' in getUserDoc(request.auth.uid) &&
+            getUserDoc(request.auth.uid).rollNumber == rollNumber
+          )
+        ) ||
+        // Proctor reading assigned student record
+        (
+          isProctor() && (
+            (
+              userDocExists(request.auth.uid) &&
+              'assignedStudents' in getUserDoc(request.auth.uid) &&
+              (
+                rollNumber in getUserDoc(request.auth.uid).assignedStudents ||
+                ('studentUid' in resource.data && resource.data.studentUid in getUserDoc(request.auth.uid).assignedStudents)
+              )
+            ) ||
+            (
+              'studentUid' in resource.data &&
+              resource.data.studentUid != null &&
+              userDocExists(resource.data.studentUid) &&
+              'proctorId' in getUserDoc(resource.data.studentUid) &&
+              getUserDoc(resource.data.studentUid).proctorId == request.auth.uid
+            )
+          )
+        )
+      );
+
+      // Only In-Charge can create, update, or delete attendance records
+      allow create, update: if isIncharge() && isValidStudentAttendance(request.resource.data, rollNumber);
+      allow delete: if isIncharge();
+    }
+
+    // =========================================================================
+    // 4. ATTENDANCE IMPORTS COLLECTION
+    // =========================================================================
+    match /attendance_imports/{importId} {
+      // Readable and writable only by In-Charge
+      allow read: if isIncharge();
+      allow create, update: if isIncharge() && isValidAttendanceImport(request.resource.data);
+      allow delete: if isIncharge();
+    }
+
+    // =========================================================================
+    // 5. EVENT REQUESTS COLLECTION
+    // =========================================================================
+    match /event_requests/{requestId} {
+      // Read access:
+      // - Student can read requests for their own UID.
+      // - Proctor can only read requests where request proctorId == request.auth.uid.
+      // - In-Charge can read all requests.
+      allow read: if isAuthenticated() && (
+        resource.data.studentUid == request.auth.uid ||
+        (isProctor() && 'proctorId' in resource.data && resource.data.proctorId == request.auth.uid) ||
+        isIncharge()
+      );
+
+      // Create access:
+      // - Student can create requests for their own UID.
+      // - In-Charge can also provision requests if needed.
+      allow create: if isAuthenticated() && (
+        isInitialStudentRequest(request.resource.data) ||
+        (isIncharge() && isValidEventRequestData(request.resource.data))
+      );
+
+      // Update access:
+      // - Student: Can only update if current status is 'Draft' or 'Returned for Correction'
+      //   (or transitioning to 'Withdrawn'). CANNOT approve own request or touch final decision fields.
+      // - Proctor: Can update recommendation fields and transition status to 'Under Proctor Review',
+      //   'Recommended for Approval', 'Recommended for Rejection', or 'Returned for Correction'.
+      //   CANNOT set status to 'Approved' or 'Rejected' (final decision invariant).
+      // - In-Charge: Can update final decision ('Approved', 'Rejected', 'Returned for Correction')
+      //   with remarks and recorded override.
+      allow update: if isAuthenticated() && (
+        isAuthorizedStudentUpdate(
+          resource.data,
+          request.resource.data,
+          request.resource.data.diff(resource.data).affectedKeys()
+        ) ||
+        isAuthorizedProctorUpdate(
+          resource.data,
+          request.resource.data,
+          request.resource.data.diff(resource.data).affectedKeys()
+        ) ||
+        isAuthorizedInchargeUpdate(
+          resource.data,
+          request.resource.data
+        )
+      );
+
+      // Delete access:
+      // - Neither student nor proctor can delete finalized requests ('Approved' or 'Rejected').
+      // - Student can only delete their own draft request.
+      // - In-Charge can manage and clean non-finalized requests.
+      allow delete: if isAuthenticated() && (
+        (isIncharge() && !(resource.data.status in ['Approved', 'Rejected'])) ||
+        (
+          resource.data.studentUid == request.auth.uid &&
+          resource.data.status == 'Draft' &&
+          !(resource.data.status in ['Approved', 'Rejected'])
+        )
+      );
+
+      // =======================================================================
+      // 6. EVENT REQUESTS HISTORY AUDIT LOG (SUBCOLLECTION)
+      // =======================================================================
+      match /history/{historyId} {
+        // Readable by anyone who can view the parent event request
+        allow read: if canReadParentEventRequest(requestId);
+
+        // Created by the user performing the transition
+        allow create: if isAuthenticated() && (
+          isIncharge() ||
+          (
+            exists(/databases/$(database)/documents/event_requests/$(requestId)) && (
+              get(/databases/$(database)/documents/event_requests/$(requestId)).data.studentUid == request.auth.uid ||
+              (
+                isProctor() &&
+                get(/databases/$(database)/documents/event_requests/$(requestId)).data.proctorId == request.auth.uid
+              )
+            )
+          )
+        ) && isValidHistoryData(request.resource.data);
+
+        // Immutable audit trail: modification and deletion strictly denied
+        allow update: if false;
+        allow delete: if false;
+      }
+    }
+  }
+}

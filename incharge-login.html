@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technical Event In-Charge Login — CampusGate</title>
+  <meta name="description" content="Authorized portal for Technical Event In-Charges to review proctor recommendations and execute final permission decisions.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <script type="importmap">
+    {
+      "imports": {
+        "firebase/app": "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js",
+        "firebase/auth": "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js",
+        "firebase/firestore": "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js"
+      }
+    }
+  </script>
+</head>
+<body class="cg-auth-page">
+
+  <!-- Navigation Bar: Top-Left CampusGate Logo (Requirement 1) -->
+  <header class="cg-header" role="banner">
+    <div class="cg-nav-container">
+      <!-- CampusGate Logo — Top Left & Clickable -->
+      <a href="index.html" class="cg-logo-link" aria-label="CampusGate Homepage">
+        <svg class="cg-logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="48" height="48" rx="12" fill="url(#nav-logo-bg)"/>
+          <path d="M12 36V22C12 18.6863 14.6863 16 18 16H30C33.3137 16 36 18.6863 36 22V36" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M17 36V23C17 21.3431 18.3431 20 20 20H28C29.6569 20 31 21.3431 31 23V36" stroke="#93C5FD" stroke-width="2" stroke-linecap="round"/>
+          <path d="M24 10L14 15L24 20L34 15L24 10Z" fill="#38BDF8"/>
+          <path d="M34 15V21C34 21 32 23 32 24" stroke="#BAE6FD" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M21 28.5L23.5 31L27.5 26" stroke="#38BDF8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 36H39" stroke="#E2E8F0" stroke-width="2.5" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="nav-logo-bg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#0F172A"/>
+              <stop offset="1" stop-color="#1E3A8A"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="cg-logo-text-group">
+          <div class="cg-logo-title">
+            <span class="navy">Campus</span><span class="blue">Gate</span>
+          </div>
+          <span class="cg-logo-tagline">Academic Permission Portal</span>
+        </div>
+      </a>
+
+      <!-- Secondary Navigation -->
+      <div class="cg-nav-actions">
+        <a href="index.html" class="cg-back-home-btn" aria-label="Return to CampusGate Home">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>Back to Home</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Premium Two-Column Layout (Requirement 4) -->
+  <main class="cg-auth-main">
+    <div class="cg-incharge-wrapper">
+      <div class="cg-split-auth-card">
+        
+        <!-- Left Panel: Navy / Soft Blue Gradient with Abstract Campus Illustration & Highlights -->
+        <section class="cg-incharge-left-panel" aria-label="Portal Overview">
+          <div class="cg-incharge-left-content">
+            <!-- Left Branding Badge -->
+            <a href="index.html" class="cg-incharge-left-logo" aria-label="CampusGate Home">
+              <svg width="34" height="34" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect width="48" height="48" rx="10" fill="#1E3A8A"/>
+                <path d="M12 36V22C12 18.6863 14.6863 16 18 16H30C33.3137 16 36 18.6863 36 22V36" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M24 10L14 15L24 20L34 15L24 10Z" fill="#38BDF8"/>
+                <path d="M21 28.5L23.5 31L27.5 26" stroke="#38BDF8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 36H39" stroke="#93C5FD" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+              <span class="title">Campus<span>Gate</span></span>
+            </a>
+
+            <!-- Heading & Supporting Text (Requirement 4) -->
+            <h1 class="cg-incharge-heading">
+              Technical Event<br><span>In-Charge</span> Portal
+            </h1>
+            <p class="cg-incharge-subtext">
+              Review proctor recommendations and manage technical event permission decisions through a transparent approval process.
+            </p>
+
+            <!-- Three Feature Highlights with Icons (Requirement 4) -->
+            <div class="cg-feature-highlights">
+              <!-- Feature 1: Review Permission Requests -->
+              <div class="cg-feature-item">
+                <div class="cg-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                </div>
+                <div>
+                  <div class="cg-feature-title">Review Permission Requests</div>
+                  <div class="cg-feature-desc">Evaluate proctor-endorsed applications with full student contest credentials.</div>
+                </div>
+              </div>
+
+              <!-- Feature 2: Make Final Decisions -->
+              <div class="cg-feature-item">
+                <div class="cg-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <polyline points="9 12 11 14 15 10"></polyline>
+                  </svg>
+                </div>
+                <div>
+                  <div class="cg-feature-title">Make Final Decisions</div>
+                  <div class="cg-feature-desc">Grant authoritative clearances or request departmental revisions instantly.</div>
+                </div>
+              </div>
+
+              <!-- Feature 3: Maintain Approval Records -->
+              <div class="cg-feature-item">
+                <div class="cg-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                  </svg>
+                </div>
+                <div>
+                  <div class="cg-feature-title">Maintain Approval Records</div>
+                  <div class="cg-feature-desc">Preserve verified audit logs for academic councils and accreditation bodies.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subtle Abstract Campus & Approval Illustration (Requirement 4) -->
+          <div class="cg-left-illustration" aria-hidden="true">
+            <svg class="cg-illustration-svg" viewBox="0 0 360 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 70H350" stroke="#38BDF8" stroke-opacity="0.3" stroke-width="2" stroke-dasharray="4 4"/>
+              <!-- Campus Gateway Lines -->
+              <path d="M40 70V30L65 15L90 30V70" stroke="#93C5FD" stroke-opacity="0.4" stroke-width="2"/>
+              <path d="M55 70V45H75V70" stroke="#93C5FD" stroke-opacity="0.4" stroke-width="1.5"/>
+              <circle cx="65" cy="32" r="6" stroke="#38BDF8" stroke-opacity="0.5" stroke-width="1.5"/>
+              <!-- Connecting Flow Path -->
+              <path d="M90 50C130 50 140 25 180 25C220 25 230 50 270 50" stroke="#38BDF8" stroke-opacity="0.6" stroke-width="2" stroke-linecap="round"/>
+              <!-- Node 1: Student -->
+              <circle cx="110" cy="45" r="4" fill="#38BDF8"/>
+              <!-- Node 2: Proctor -->
+              <circle cx="180" cy="25" r="5" fill="#60A5FA"/>
+              <!-- Node 3: In-Charge Seal -->
+              <g transform="translate(265, 30)">
+                <circle cx="20" cy="20" r="18" fill="#1E40AF" stroke="#38BDF8" stroke-width="2"/>
+                <path d="M13 20L18 25L27 15" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+            </svg>
+          </div>
+        </section>
+
+        <!-- Right Side: Clean White Login Card (Requirement 4) -->
+        <section class="cg-incharge-right-card" aria-label="Sign In Credentials">
+          <!-- Shield-Check Icon -->
+          <div class="cg-incharge-card-header">
+            <div class="cg-incharge-badge-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <polyline points="9 12 11 14 15 10"></polyline>
+              </svg>
+            </div>
+            <h2>Welcome Back</h2>
+            <p>Sign in to access the approval portal.</p>
+          </div>
+
+          <!-- Sign-In Form -->
+          <form class="cg-auth-form" data-role="Technical Event In-Charge" novalidate>
+            <!-- Input 1: Official College Email -->
+            <div class="cg-form-group">
+              <label for="incharge-email" class="cg-form-label">Official College Email</label>
+              <div class="cg-input-wrapper">
+                <svg class="cg-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <input 
+                  type="email" 
+                  id="incharge-email" 
+                  name="email" 
+                  class="cg-input" 
+                  placeholder="incharge.name@college.edu" 
+                  required 
+                  autocomplete="email"
+                >
+              </div>
+            </div>
+
+            <!-- Input 2: Password with Working Show/Hide Icon -->
+            <div class="cg-form-group">
+              <label for="incharge-password" class="cg-form-label">Password</label>
+              <div class="cg-input-wrapper">
+                <svg class="cg-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <input 
+                  type="password" 
+                  id="incharge-password" 
+                  name="password" 
+                  class="cg-input cg-input-with-toggle" 
+                  placeholder="Enter your administrative password" 
+                  required 
+                  autocomplete="current-password"
+                >
+                <button 
+                  type="button" 
+                  class="cg-password-toggle" 
+                  data-target="incharge-password" 
+                  aria-label="Show password"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Checkbox & Link -->
+            <div class="cg-form-options">
+              <label class="cg-checkbox-label">
+                <input type="checkbox" name="remember" class="cg-checkbox">
+                <span>Remember me</span>
+              </label>
+              <a href="#" class="cg-link cg-forgot-pwd-link">Forgot password?</a>
+            </div>
+
+            <!-- Full-Width Primary Button: Sign In -->
+            <button type="submit" class="cg-btn cg-btn-primary cg-btn-full">
+              <span>Sign In</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+
+            <!-- Divider -->
+            <div class="cg-auth-divider">
+              <span>or</span>
+            </div>
+
+            <!-- Google Sign In Button -->
+            <button type="button" class="cg-btn cg-btn-google cg-btn-full cg-google-signin-btn" data-role="Technical-Event In-Charge">
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.665-5.17 3.665-9.12z"/>
+                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.26 21.36 7.33 24 12 24z"/>
+                <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.13z"/>
+                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z"/>
+              </svg>
+              <span>Continue with Google</span>
+            </button>
+
+
+            <!-- Quick Fill Demo In-Charge Accounts -->
+            <div style="margin-top: 1.25rem; padding: 0.85rem; background: var(--color-slate-100); border-radius: 8px; font-size: 0.825rem; border: 1px dashed var(--color-slate-300);">
+              <div style="font-weight: 600; color: var(--color-navy-950); margin-bottom: 0.45rem;">
+                ⚡ Quick Fill Test In-Charge Accounts (Click to Fill & Sign In):
+              </div>
+              <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+                <button type="button" class="cg-btn-sm cg-btn-outline demo-pill" data-email="tech.incharge@techuniv.edu.in" data-pass="Incharge@2026">Dr. A. Srinivasa Rao (In-Charge)</button>
+                <button type="button" class="cg-btn-sm cg-btn-outline demo-pill" data-email="admin@techuniv.edu.in" data-pass="Admin@2026">Portal Admin</button>
+              </div>
+            </div>
+
+            <!-- Small Footer Text -->
+            <div class="cg-auth-note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              <span>Authorized in-charge accounts only.</span>
+            </div>
+
+            <!-- Secondary Navigation: Back to Home Link -->
+            <div class="cg-incharge-back-home">
+              <a href="index.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Back to Home</span>
+              </a>
+            </div>
+          </form>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Forgot Password Modal -->
+  <div class="cg-modal-backdrop" id="cg-forgot-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="cg-modal">
+      <div class="cg-modal-header">
+        <h3 class="cg-modal-title" id="modal-title">Administrative Reset</h3>
+        <button class="cg-modal-close" aria-label="Close dialog">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <p style="font-size: 0.9rem; color: var(--color-slate-600); margin-bottom: 1.25rem;">
+        Enter your official college email address. A high-priority administrative verification dispatch will be initiated.
+      </p>
+      <form id="cg-reset-form">
+        <div class="cg-form-group">
+          <label for="reset-email" class="cg-form-label">Official College Email</label>
+          <input type="email" id="reset-email" class="cg-input" placeholder="incharge.name@college.edu" required>
+        </div>
+        <button type="submit" class="cg-btn cg-btn-primary cg-btn-full">Send Recovery Link</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Uniform Footer -->
+  <footer class="cg-footer" role="contentinfo">
+    <div class="cg-footer-container">
+      <div class="cg-footer-bottom" style="padding-top: 0; border: none;">
+        <div>&copy; 2026 CampusGate Academic Management System.</div>
+        <div class="cg-status-indicator">
+          <span class="cg-status-dot"></span>
+          <span>In-Charge Clearance Portal Active</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

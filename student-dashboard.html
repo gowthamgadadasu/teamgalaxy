@@ -1,0 +1,1919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard — CampusGate</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+</head>
+<body class="cg-auth-page" style="background: var(--color-slate-50);">
+
+  <!-- Header -->
+  <header class="cg-header" role="banner">
+    <div class="cg-nav-container">
+      <a href="index.html" class="cg-logo-link" aria-label="CampusGate Homepage">
+        <svg class="cg-logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="48" height="48" rx="12" fill="#1E3A8A"/>
+          <path d="M12 36V22C12 18.6863 14.6863 16 18 16H30C33.3137 16 36 18.6863 36 22V36" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M17 36V23C17 21.3431 18.3431 20 20 20H28C29.6569 20 31 21.3431 31 23V36" stroke="#93C5FD" stroke-width="2" stroke-linecap="round"/>
+          <path d="M24 10L14 15L24 20L34 15L24 10Z" fill="#38BDF8"/>
+          <path d="M9 36H39" stroke="#E2E8F0" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div class="cg-logo-text-group">
+          <div class="cg-logo-title"><span class="navy">Campus</span><span class="blue">Gate</span></div>
+          <span class="cg-logo-tagline">Student Portal</span>
+        </div>
+      </a>
+
+      <!-- Current Logged-in Student Profile Pill & Sign Out -->
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <div class="cg-user-pill" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0.85rem; background: var(--color-slate-100); border: 1px solid var(--color-slate-200); border-radius: var(--radius-full);">
+          <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--color-navy-600); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;" id="headerUserAvatar">A</div>
+          <span style="font-weight: 600; font-size: 0.875rem; color: var(--color-slate-800);" id="headerUserName">Aarav Reddy (24AI001)</span>
+        </div>
+        <a href="student-login.html" id="signOutLink" class="cg-btn cg-btn-outline" style="padding: 0.4rem 0.85rem; font-size: 0.825rem;">Sign Out</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="cg-dash-main">
+    <!-- User Profile Header -->
+    <div class="cg-dash-header">
+      <div class="cg-dash-user-info">
+        <div class="cg-dash-avatar" id="avatarLetter">A</div>
+        <div>
+          <div class="cg-dash-title">
+            <span id="studentDisplayName">Aarav Sharma</span>
+            <span class="cg-status-pill status-eligible" id="eligibilityPill">ELIGIBLE (≥75%)</span>
+          </div>
+          <div class="cg-dash-subtitle" id="studentMeta">
+            Roll No: 24AI001 &bull; Dept: Artificial Intelligence &bull; Year: II / A &bull; Proctor: Dr. Rajesh Kumar
+          </div>
+        </div>
+      </div>
+      <div>
+        <button class="cg-btn cg-btn-primary" id="openSubmitModalBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Submit Event Request
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="cg-stats-grid">
+      <!-- Attendance % Card -->
+      <div class="cg-stat-card">
+        <div class="cg-stat-card-header">
+          <span class="cg-stat-label">Attendance Percentage</span>
+          <div class="cg-stat-icon-wrapper">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+        </div>
+        <div class="cg-stat-value" id="attendanceVal">88.0%</div>
+        <div class="cg-stat-subtext" id="attendanceDetail">88 Attended / 100 Conducted</div>
+      </div>
+
+      <!-- Eligibility Threshold Card -->
+      <div class="cg-stat-card">
+        <div class="cg-stat-card-header">
+          <span class="cg-stat-label">Required Threshold</span>
+          <div class="cg-stat-icon-wrapper">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+        </div>
+        <div class="cg-stat-value">75.0%</div>
+        <div class="cg-stat-subtext" id="freshnessDetail">Data as of: 2026-10-10</div>
+      </div>
+
+      <!-- Submitted Requests Card -->
+      <div class="cg-stat-card">
+        <div class="cg-stat-card-header">
+          <span class="cg-stat-label">Total Requests</span>
+          <div class="cg-stat-icon-wrapper">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+        </div>
+        <div class="cg-stat-value" id="totalRequestsVal">2</div>
+        <div class="cg-stat-subtext">Across technical competitions</div>
+      </div>
+
+      <!-- Approved Events Card -->
+      <div class="cg-stat-card">
+        <div class="cg-stat-card-header">
+          <span class="cg-stat-label">Approved ODs</span>
+          <div class="cg-stat-icon-wrapper" style="color: #16a34a; background: #dcfce7;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+        <div class="cg-stat-value" id="approvedVal" style="color: #16a34a;">1</div>
+        <div class="cg-stat-subtext">Official OD clearance granted</div>
+      </div>
+    </div>
+
+    <!-- Requests Table Card -->
+    <div class="cg-section-card">
+      <div class="cg-section-card-header">
+        <div class="cg-section-card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+          My Technical Event Requests & Approval Tracking
+        </div>
+      </div>
+      <div class="cg-table-wrapper">
+        <table class="cg-table">
+          <thead>
+            <tr>
+              <th>Reference #</th>
+              <th>Event Title</th>
+              <th>Category</th>
+              <th>Dates</th>
+              <th>Status</th>
+              <th>Proctor Recommendation</th>
+              <th>Final Remarks</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="studentRequestsTableBody">
+            <!-- Populated via script -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Submit Event Request Modal -->
+  <div class="cg-modal-backdrop" id="requestModal" role="dialog" aria-modal="true">
+    <div class="cg-modal" style="max-width: 650px;">
+      <div class="cg-modal-header">
+        <h3 class="cg-modal-title" id="modalHeading">Submit Technical Event Request</h3>
+        <button class="cg-modal-close" id="closeSubmitModalBtn">&times;</button>
+      </div>
+
+      <div id="overlapWarningBanner" style="display: none; padding: 0.75rem 1rem; border-radius: 6px; background: #fef3c7; color: #92400e; font-size: 0.85rem; margin-bottom: 1rem;">
+        ⚠️ <strong>Warning:</strong> Selected dates overlap with an existing event request! It will be flagged for review.
+      </div>
+
+      <form id="eventSubmitForm">
+        <input type="hidden" id="editingRequestId" value="">
+
+        <div class="cg-form-row">
+          <div class="cg-form-group">
+            <label class="cg-form-label">Event Title *</label>
+            <input type="text" id="formTitle" name="eventTitle" class="cg-input" placeholder="e.g. ACM-ICPC Regional Finale" required>
+          </div>
+          <div class="cg-form-group">
+            <label class="cg-form-label">Organizer Name *</label>
+            <input type="text" id="formOrganizer" name="organizer" class="cg-input" placeholder="e.g. IIT Madras / ACM" required>
+          </div>
+        </div>
+
+        <div class="cg-form-row">
+          <div class="cg-form-group">
+            <label class="cg-form-label">Category *</label>
+            <select id="formCategory" name="category" class="cg-input" required>
+              <option value="Hackathon">Hackathon</option>
+              <option value="Workshop">Workshop</option>
+              <option value="Conference">Conference</option>
+              <option value="Technical Competition">Technical Competition</option>
+              <option value="Industrial Visit">Industrial Visit</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="cg-form-group">
+            <label class="cg-form-label">Venue & City *</label>
+            <input type="text" id="formVenue" name="venue" class="cg-input" placeholder="e.g. Research Park, Bengaluru" required>
+          </div>
+        </div>
+
+        <div class="cg-form-row">
+          <div class="cg-form-group">
+            <label class="cg-form-label">Start Date *</label>
+            <input type="date" id="formStartDate" name="startDate" class="cg-input" required>
+          </div>
+          <div class="cg-form-group">
+            <label class="cg-form-label">End Date *</label>
+            <input type="date" id="formEndDate" name="endDate" class="cg-input" required>
+          </div>
+        </div>
+
+        <div class="cg-form-group">
+          <label class="cg-form-label">Event / Registration URL</label>
+          <input type="url" id="formUrl" name="eventUrl" class="cg-input" placeholder="https://events.example.com">
+        </div>
+
+        <div class="cg-form-group">
+          <label class="cg-form-label">Purpose & Expected Technical Benefit *</label>
+          <textarea id="formPurpose" name="purpose" class="cg-input" rows="3" placeholder="Describe the academic motivation and technical benefits..." required></textarea>
+        </div>
+
+        <div class="cg-form-row">
+          <div class="cg-form-group">
+            <label class="cg-form-label">Upload Supporting Document (PDF / Image / Letter)</label>
+            <input type="file" id="formFile" name="supportingDocument" class="cg-input" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx">
+          </div>
+          <div class="cg-form-group">
+            <label class="cg-form-label">Or Document URL / Cloud Link</label>
+            <input type="url" id="formDoc" name="supportingDocUrl" class="cg-input" placeholder="https://drive.google.com/registration-slip.pdf">
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="cg-btn cg-btn-outline" id="saveDraftBtn">Save as Draft</button>
+          <button type="submit" class="cg-btn cg-btn-primary" id="submitFormBtn">Submit for Proctor Review</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Timeline Audit History Modal -->
+  <div class="cg-modal-backdrop" id="timelineModal" role="dialog" aria-modal="true">
+    <div class="cg-modal" style="max-width: 580px;">
+      <div class="cg-modal-header">
+        <h3 class="cg-modal-title" id="timelineModalTitle">Request History & Audit Trail</h3>
+        <button class="cg-modal-close" id="closeTimelineBtn">&times;</button>
+      </div>
+      <div id="timelineContainer" class="cg-timeline">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Offline Seed Data for Zero-Failure Operation
+    const FALLBACK_STUDENTS = [
+  {
+    "roll": "24AI001",
+    "email": "24ai001@techuniv.edu.in",
+    "pass": "Stu@24AI001",
+    "name": "Aarav Reddy",
+    "role": "student",
+    "dept": "AI",
+    "year": "II",
+    "sec": "A",
+    "proctorId": "P01",
+    "pct": 90,
+    "attended": 108,
+    "conducted": 120,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "24AI002",
+    "email": "24ai002@techuniv.edu.in",
+    "pass": "Stu@24AI002",
+    "name": "Sanjana Patel",
+    "role": "student",
+    "dept": "AI",
+    "year": "II",
+    "sec": "A",
+    "proctorId": "P01",
+    "pct": 79.17,
+    "attended": 95,
+    "conducted": 120,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "24AI003",
+    "email": "24ai003@techuniv.edu.in",
+    "pass": "Stu@24AI003",
+    "name": "Karthik Naidu",
+    "role": "student",
+    "dept": "AI",
+    "year": "II",
+    "sec": "A",
+    "proctorId": "P01",
+    "pct": 75,
+    "attended": 90,
+    "conducted": 120,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "24AI004",
+    "email": "24ai004@techuniv.edu.in",
+    "pass": "Stu@24AI004",
+    "name": "Meghana Rao",
+    "role": "student",
+    "dept": "AI",
+    "year": "II",
+    "sec": "A",
+    "proctorId": "P01",
+    "pct": 65,
+    "attended": 78,
+    "conducted": 120,
+    "asOf": "2026-10-10",
+    "status": "Ineligible"
+  },
+  {
+    "roll": "24AI005",
+    "email": "24ai005@techuniv.edu.in",
+    "pass": "Stu@24AI005",
+    "name": "Rohit Sharma",
+    "role": "student",
+    "dept": "AI",
+    "year": "II",
+    "sec": "A",
+    "proctorId": "P01",
+    "pct": 94.17,
+    "attended": 113,
+    "conducted": 120,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "24AI006",
+    "email": "24ai006@techuniv.edu.in",
+    "pass": "Stu@24AI006",
+    "name": "Ananya Iyer",
+    "role": "student",
+    "dept": "AI",
+    "year": "II",
+    "sec": "B",
+    "proctorId": "P01",
+    "pct": 83.33,
+    "attended": 100,
+    "conducted": 120,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "24AI007",
+    "email": "24ai007@techuniv.edu.in",
+    "pass": "Stu@24AI007",
+    "name": "Vikram Singh",
+    "role": "student",
+    "dept": "AI",
+    "year": "II",
+    "sec": "B",
+    "proctorId": "P01",
+    "pct": 74.17,
+    "attended": 89,
+    "conducted": 120,
+    "asOf": "2026-10-10",
+    "status": "Ineligible"
+  },
+  {
+    "roll": "24AI008",
+    "email": "24ai008@techuniv.edu.in",
+    "pass": "Stu@24AI008",
+    "name": "Priya Menon",
+    "role": "student",
+    "dept": "AI",
+    "year": "II",
+    "sec": "B",
+    "proctorId": "P01",
+    "pct": 75.83,
+    "attended": 91,
+    "conducted": 120,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "24AI009",
+    "email": "24ai009@techuniv.edu.in",
+    "pass": "Stu@24AI009",
+    "name": "Harsha Vardhan",
+    "role": "student",
+    "dept": "AI",
+    "year": "II",
+    "sec": "B",
+    "proctorId": "P01",
+    "pct": 87.5,
+    "attended": 105,
+    "conducted": 120,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "24AI010",
+    "email": "24ai010@techuniv.edu.in",
+    "pass": "Stu@24AI010",
+    "name": "Divya Kulkarni",
+    "role": "student",
+    "dept": "AI",
+    "year": "II",
+    "sec": "B",
+    "proctorId": "P01",
+    "pct": 60,
+    "attended": 72,
+    "conducted": 120,
+    "asOf": "2026-10-10",
+    "status": "Ineligible"
+  },
+  {
+    "roll": "24CS001",
+    "email": "24cs001@techuniv.edu.in",
+    "pass": "Stu@24CS001",
+    "name": "Sai Teja",
+    "role": "student",
+    "dept": "CSE",
+    "year": "II",
+    "sec": "A",
+    "proctorId": "P02",
+    "pct": 88,
+    "attended": 88,
+    "conducted": 100,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "24CS002",
+    "email": "24cs002@techuniv.edu.in",
+    "pass": "Stu@24CS002",
+    "name": "Lavanya Gupta",
+    "role": "student",
+    "dept": "CSE",
+    "year": "II",
+    "sec": "A",
+    "proctorId": "P02",
+    "pct": 75,
+    "attended": 75,
+    "conducted": 100,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "24CS003",
+    "email": "24cs003@techuniv.edu.in",
+    "pass": "Stu@24CS003",
+    "name": "Arjun Nair",
+    "role": "student",
+    "dept": "CSE",
+    "year": "II",
+    "sec": "A",
+    "proctorId": "P02",
+    "pct": 92,
+    "attended": 92,
+    "conducted": 100,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "24CS004",
+    "email": "24cs004@techuniv.edu.in",
+    "pass": "Stu@24CS004",
+    "name": "Neha Verma",
+    "role": "student",
+    "dept": "CSE",
+    "year": "II",
+    "sec": "A",
+    "proctorId": "P02",
+    "pct": 68,
+    "attended": 68,
+    "conducted": 100,
+    "asOf": "2026-10-10",
+    "status": "Ineligible"
+  },
+  {
+    "roll": "24CS005",
+    "email": "24cs005@techuniv.edu.in",
+    "pass": "Stu@24CS005",
+    "name": "Tarun Kumar",
+    "role": "student",
+    "dept": "CSE",
+    "year": "II",
+    "sec": "A",
+    "proctorId": "P02",
+    "pct": null,
+    "attended": null,
+    "conducted": null,
+    "asOf": null,
+    "status": "Unavailable"
+  },
+  {
+    "roll": "24CS006",
+    "email": "24cs006@techuniv.edu.in",
+    "pass": "Stu@24CS006",
+    "name": "Swathi Reddy",
+    "role": "student",
+    "dept": "CSE",
+    "year": "II",
+    "sec": "B",
+    "proctorId": "P02",
+    "pct": 84,
+    "attended": 84,
+    "conducted": 100,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "24CS007",
+    "email": "24cs007@techuniv.edu.in",
+    "pass": "Stu@24CS007",
+    "name": "Mohammed Faizan",
+    "role": "student",
+    "dept": "CSE",
+    "year": "II",
+    "sec": "B",
+    "proctorId": "P02",
+    "pct": 74,
+    "attended": 74,
+    "conducted": 100,
+    "asOf": "2026-10-10",
+    "status": "Ineligible"
+  },
+  {
+    "roll": "24CS008",
+    "email": "24cs008@techuniv.edu.in",
+    "pass": "Stu@24CS008",
+    "name": "Pooja Desai",
+    "role": "student",
+    "dept": "CSE",
+    "year": "II",
+    "sec": "B",
+    "proctorId": "P02",
+    "pct": 96,
+    "attended": 96,
+    "conducted": 100,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "24CS009",
+    "email": "24cs009@techuniv.edu.in",
+    "pass": "Stu@24CS009",
+    "name": "Nikhil Chowdary",
+    "role": "student",
+    "dept": "CSE",
+    "year": "II",
+    "sec": "B",
+    "proctorId": "P02",
+    "pct": 85,
+    "attended": 85,
+    "conducted": 100,
+    "asOf": "2026-07-18",
+    "status": "Stale - Verify"
+  },
+  {
+    "roll": "24CS010",
+    "email": "24cs010@techuniv.edu.in",
+    "pass": "Stu@24CS010",
+    "name": "Bhavana Joshi",
+    "role": "student",
+    "dept": "CSE",
+    "year": "II",
+    "sec": "B",
+    "proctorId": "P02",
+    "pct": 83,
+    "attended": 83,
+    "conducted": 100,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "23EC001",
+    "email": "23ec001@techuniv.edu.in",
+    "pass": "Stu@23EC001",
+    "name": "Manoj Prasad",
+    "role": "student",
+    "dept": "ECE",
+    "year": "III",
+    "sec": "A",
+    "proctorId": "P03",
+    "pct": 93.75,
+    "attended": 90,
+    "conducted": 96,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "23EC002",
+    "email": "23ec002@techuniv.edu.in",
+    "pass": "Stu@23EC002",
+    "name": "Keerthi Varma",
+    "role": "student",
+    "dept": "ECE",
+    "year": "III",
+    "sec": "A",
+    "proctorId": "P03",
+    "pct": 75,
+    "attended": 72,
+    "conducted": 96,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "23EC003",
+    "email": "23ec003@techuniv.edu.in",
+    "pass": "Stu@23EC003",
+    "name": "Abhishek Yadav",
+    "role": "student",
+    "dept": "ECE",
+    "year": "III",
+    "sec": "A",
+    "proctorId": "P03",
+    "pct": 83.33,
+    "attended": 80,
+    "conducted": 96,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "23EC004",
+    "email": "23ec004@techuniv.edu.in",
+    "pass": "Stu@23EC004",
+    "name": "Sneha Pillai",
+    "role": "student",
+    "dept": "ECE",
+    "year": "III",
+    "sec": "A",
+    "proctorId": "P03",
+    "pct": 68.75,
+    "attended": 66,
+    "conducted": 96,
+    "asOf": "2026-10-10",
+    "status": "Ineligible"
+  },
+  {
+    "roll": "23EC005",
+    "email": "23ec005@techuniv.edu.in",
+    "pass": "Stu@23EC005",
+    "name": "Rahul Dev",
+    "role": "student",
+    "dept": "ECE",
+    "year": "III",
+    "sec": "A",
+    "proctorId": "P03",
+    "pct": 88.54,
+    "attended": 85,
+    "conducted": 96,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "23EC006",
+    "email": "23ec006@techuniv.edu.in",
+    "pass": "Stu@23EC006",
+    "name": "Harini Krishnan",
+    "role": "student",
+    "dept": "ECE",
+    "year": "III",
+    "sec": "A",
+    "proctorId": "P03",
+    "pct": 73.96,
+    "attended": 71,
+    "conducted": 96,
+    "asOf": "2026-10-10",
+    "status": "Ineligible"
+  },
+  {
+    "roll": "23EC007",
+    "email": "23ec007@techuniv.edu.in",
+    "pass": "Stu@23EC007",
+    "name": "Yashwanth Raju",
+    "role": "student",
+    "dept": "ECE",
+    "year": "III",
+    "sec": "B",
+    "proctorId": "P03",
+    "pct": 96.88,
+    "attended": 93,
+    "conducted": 96,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "23EC008",
+    "email": "23ec008@techuniv.edu.in",
+    "pass": "Stu@23EC008",
+    "name": "Ishita Bansal",
+    "role": "student",
+    "dept": "ECE",
+    "year": "III",
+    "sec": "B",
+    "proctorId": "P03",
+    "pct": 79.17,
+    "attended": 76,
+    "conducted": 96,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "23EC009",
+    "email": "23ec009@techuniv.edu.in",
+    "pass": "Stu@23EC009",
+    "name": "Chaitanya Rao",
+    "role": "student",
+    "dept": "ECE",
+    "year": "III",
+    "sec": "B",
+    "proctorId": "P03",
+    "pct": 62.5,
+    "attended": 60,
+    "conducted": 96,
+    "asOf": "2026-10-10",
+    "status": "Ineligible"
+  },
+  {
+    "roll": "23EC010",
+    "email": "23ec010@techuniv.edu.in",
+    "pass": "Stu@23EC010",
+    "name": "Lakshmi Prasanna",
+    "role": "student",
+    "dept": "ECE",
+    "year": "III",
+    "sec": "B",
+    "proctorId": "P03",
+    "pct": 91.67,
+    "attended": 88,
+    "conducted": 96,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "23EC011",
+    "email": "23ec011@techuniv.edu.in",
+    "pass": "Stu@23EC011",
+    "name": "Sandeep Goud",
+    "role": "student",
+    "dept": "ECE",
+    "year": "III",
+    "sec": "B",
+    "proctorId": "P03",
+    "pct": 81.25,
+    "attended": 78,
+    "conducted": 96,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  },
+  {
+    "roll": "23EC012",
+    "email": "23ec012@techuniv.edu.in",
+    "pass": "Stu@23EC012",
+    "name": "Fatima Sheikh",
+    "role": "student",
+    "dept": "ECE",
+    "year": "III",
+    "sec": "B",
+    "proctorId": "P03",
+    "pct": 76.04,
+    "attended": 73,
+    "conducted": 96,
+    "asOf": "2026-10-10",
+    "status": "Eligible"
+  }
+];
+    const FALLBACK_REQUESTS = [
+  {
+    "id": "TEP-2026-0001",
+    "reference_number": "TEP-2026-0001",
+    "roll_number": "24AI001",
+    "studentRoll": "24AI001",
+    "event_title": "Smart India Hackathon 2026 - Grand Finale",
+    "organizer": "Innovation Cell, Ministry of Education",
+    "category": "Hackathon",
+    "venue": "NIT Warangal",
+    "start_date": "2026-11-05",
+    "end_date": "2026-11-07",
+    "event_url": "https://sih.example.org/2026",
+    "purpose": "Team qualified for grand finale; build and present an AI-based public-service solution.",
+    "supporting_doc_url": "SIH_Selection_Letter.pdf",
+    "status": "Approved",
+    "overlap_flag": "",
+    "proctor_recommendation": "Recommend Approval",
+    "proctor_remarks": "Attendance 90.00%, eligible. Finalist letter verified.",
+    "final_remarks": "Approved. Student to submit participation certificate after the event.",
+    "approval_reference": "APR-2026-0001",
+    "override_used": "No",
+    "created_at": "2026-10-01",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "24AI001",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-01"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0002",
+    "reference_number": "TEP-2026-0002",
+    "roll_number": "24AI005",
+    "studentRoll": "24AI005",
+    "event_title": "Generative AI & LLM Workshop",
+    "organizer": "Deccan Institute of AI",
+    "category": "Workshop",
+    "venue": "Deccan Institute Campus",
+    "start_date": "2026-10-24",
+    "end_date": "2026-10-25",
+    "event_url": "https://dia.example.org/genai-workshop",
+    "purpose": "Hands-on training on fine-tuning and deploying LLMs; relevant to AI electives.",
+    "supporting_doc_url": "Registration_Confirmation.pdf",
+    "status": "Pending Final Decision",
+    "overlap_flag": "",
+    "proctor_recommendation": "Recommend Approval",
+    "proctor_remarks": "Attendance 94.17%. Event relevant to curriculum.",
+    "final_remarks": "",
+    "approval_reference": "",
+    "override_used": "No",
+    "created_at": "2026-10-06",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "24AI005",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-06"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0003",
+    "reference_number": "TEP-2026-0003",
+    "roll_number": "24AI003",
+    "studentRoll": "24AI003",
+    "event_title": "National Conference on ML Applications (NCMLA 2026)",
+    "organizer": "Coastal Institute of Technology",
+    "category": "Conference",
+    "venue": "CIT Auditorium",
+    "start_date": "2026-11-12",
+    "end_date": "2026-11-13",
+    "event_url": "https://ncmla.example.org",
+    "purpose": "Present paper on crop-disease detection; paper accepted for oral presentation.",
+    "supporting_doc_url": "Paper_Acceptance_Letter.pdf",
+    "status": "Under Proctor Review",
+    "overlap_flag": "",
+    "proctor_recommendation": null,
+    "proctor_remarks": "",
+    "final_remarks": "",
+    "approval_reference": "",
+    "override_used": "No",
+    "created_at": "2026-10-09",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "24AI003",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-09"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0004",
+    "reference_number": "TEP-2026-0004",
+    "roll_number": "24AI004",
+    "studentRoll": "24AI004",
+    "event_title": "CodeSprint 48-Hour Hackathon",
+    "organizer": "Bharat Tech Forum",
+    "category": "Hackathon",
+    "venue": "Convention Centre",
+    "start_date": "2026-10-30",
+    "end_date": "2026-11-01",
+    "event_url": "https://codesprint.example.org",
+    "purpose": "Build a prototype with a team of four; networking with industry mentors.",
+    "supporting_doc_url": "",
+    "status": "Rejected",
+    "overlap_flag": "",
+    "proctor_recommendation": "Recommend Rejection",
+    "proctor_remarks": "Attendance 65.00% is below the 75% threshold.",
+    "final_remarks": "Attendance below the required 75% and no exceptional justification provided.",
+    "approval_reference": "",
+    "override_used": "No",
+    "created_at": "2026-10-03",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "24AI004",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-03"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0005",
+    "reference_number": "TEP-2026-0005",
+    "roll_number": "24AI007",
+    "studentRoll": "24AI007",
+    "event_title": "Inter-College Coding Championship",
+    "organizer": "Southern Coders Guild",
+    "category": "Technical Competition",
+    "venue": "Anna Tech Park",
+    "start_date": "2026-11-20",
+    "end_date": "2026-11-21",
+    "event_url": "https://scg.example.org/icc",
+    "purpose": "Compete in individual algorithmic rounds.",
+    "supporting_doc_url": "Invitation_Mail.pdf",
+    "status": "Recommended for Rejection",
+    "overlap_flag": "",
+    "proctor_recommendation": "Recommend Rejection",
+    "proctor_remarks": "Attendance 74.17%, short of 75% by 0.83 points. Advise reapplying once attendance improves.",
+    "final_remarks": "",
+    "approval_reference": "",
+    "override_used": "No",
+    "created_at": "2026-10-08",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "24AI007",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-08"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0006",
+    "reference_number": "TEP-2026-0006",
+    "roll_number": "24CS005",
+    "studentRoll": "24CS005",
+    "event_title": "Cloud Native Workshop",
+    "organizer": "CNCF Hyderabad Community",
+    "category": "Workshop",
+    "venue": "T-Hub",
+    "start_date": "2026-10-28",
+    "end_date": "2026-10-28",
+    "event_url": "https://cncf-hyd.example.org",
+    "purpose": "Learn Kubernetes fundamentals.",
+    "supporting_doc_url": "",
+    "status": "Under Proctor Review",
+    "overlap_flag": "",
+    "proctor_recommendation": null,
+    "proctor_remarks": "",
+    "final_remarks": "",
+    "approval_reference": "",
+    "override_used": "No",
+    "created_at": "2026-10-10",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "24CS005",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-10"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0007",
+    "reference_number": "TEP-2026-0007",
+    "roll_number": "24CS009",
+    "studentRoll": "24CS009",
+    "event_title": "Cybersecurity Summit 2026",
+    "organizer": "SecureIndia Council",
+    "category": "Conference",
+    "venue": "Hall 3, Expo Centre",
+    "start_date": "2026-11-06",
+    "end_date": "2026-11-08",
+    "event_url": "https://secsummit.example.org",
+    "purpose": "Attend security tracks and CTF village.",
+    "supporting_doc_url": "Registration_Confirmation.pdf",
+    "status": "Pending Final Decision",
+    "overlap_flag": "",
+    "proctor_recommendation": "Recommend Approval",
+    "proctor_remarks": "Attendance data is from 18-07-2026 (stale). Recommend approval subject to fresh attendance verification.",
+    "final_remarks": "",
+    "approval_reference": "",
+    "override_used": "No",
+    "created_at": "2026-10-05",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "24CS009",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-05"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0008",
+    "reference_number": "TEP-2026-0008",
+    "roll_number": "24CS002",
+    "studentRoll": "24CS002",
+    "event_title": "Full Stack Web Development Bootcamp",
+    "organizer": "TechNova Academy",
+    "category": "Workshop",
+    "venue": "TechNova Campus",
+    "start_date": "2026-10-26",
+    "end_date": "2026-10-27",
+    "event_url": "https://technova.example.org/bootcamp",
+    "purpose": "Two-day bootcamp on MERN stack to support mini-project.",
+    "supporting_doc_url": "Registration_Confirmation.pdf",
+    "status": "Approved",
+    "overlap_flag": "",
+    "proctor_recommendation": "Recommend Approval",
+    "proctor_remarks": "Attendance exactly 75.00% - meets threshold.",
+    "final_remarks": "Approved; attendance meets minimum requirement.",
+    "approval_reference": "APR-2026-0008",
+    "override_used": "No",
+    "created_at": "2026-10-02",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "24CS002",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-02"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0009",
+    "reference_number": "TEP-2026-0009",
+    "roll_number": "24CS004",
+    "studentRoll": "24CS004",
+    "event_title": "Industrial Visit - Data Centre & Cloud Operations",
+    "organizer": "Infra Systems Pvt Ltd",
+    "category": "Industrial Visit",
+    "venue": "Infra Systems Data Centre",
+    "start_date": "2026-10-29",
+    "end_date": "2026-10-29",
+    "event_url": "https://infrasys.example.org/visit",
+    "purpose": "Curriculum-linked visit for Cloud Computing course.",
+    "supporting_doc_url": "HOD_Permission_Letter.pdf",
+    "status": "Approved",
+    "overlap_flag": "",
+    "proctor_recommendation": "Recommend Rejection",
+    "proctor_remarks": "Attendance 68.00% is below threshold; visit is curriculum-linked per HOD letter.",
+    "final_remarks": "Approved via override: curriculum-linked visit with HOD recommendation.",
+    "approval_reference": "APR-2026-0009",
+    "override_used": "Yes",
+    "created_at": "2026-10-04",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "24CS004",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0010",
+    "reference_number": "TEP-2026-0010",
+    "roll_number": "24CS007",
+    "studentRoll": "24CS007",
+    "event_title": "AI for Social Good Hackathon",
+    "organizer": "Impact Labs",
+    "category": "Hackathon",
+    "venue": "Impact Labs HQ",
+    "start_date": "2026-11-14",
+    "end_date": "2026-11-15",
+    "event_url": "https://impactlabs.example.org/hack",
+    "purpose": "Build solutions for accessibility challenges.",
+    "supporting_doc_url": "",
+    "status": "Returned for Correction",
+    "overlap_flag": "",
+    "proctor_recommendation": "Return for Clarification",
+    "proctor_remarks": "Registration confirmation missing; invitation shows 14-16 Nov but form says 14-15 Nov. Attendance 74.00%.",
+    "final_remarks": "",
+    "approval_reference": "",
+    "override_used": "No",
+    "created_at": "2026-10-07",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "24CS007",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-07"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0011",
+    "reference_number": "TEP-2026-0011",
+    "roll_number": "23EC004",
+    "studentRoll": "23EC004",
+    "event_title": "International Conference on VLSI & Embedded Systems",
+    "organizer": "IEEE Student Chapter",
+    "category": "Conference",
+    "venue": "Bengaluru Intl. Centre",
+    "start_date": "2026-11-02",
+    "end_date": "2026-11-04",
+    "event_url": "https://vlsiconf.example.org",
+    "purpose": "Attend sessions on low-power VLSI design.",
+    "supporting_doc_url": "Registration_Confirmation.pdf",
+    "status": "Rejected",
+    "overlap_flag": "",
+    "proctor_recommendation": "Recommend Rejection",
+    "proctor_remarks": "Attendance 68.75% is below threshold.",
+    "final_remarks": "Attendance below 75%; dates also clash with internal lab examinations.",
+    "approval_reference": "",
+    "override_used": "No",
+    "created_at": "2026-10-02",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "23EC004",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-02"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0012",
+    "reference_number": "TEP-2026-0012",
+    "roll_number": "23EC002",
+    "studentRoll": "23EC002",
+    "event_title": "IoT Hack Day",
+    "organizer": "Smart Devices Society",
+    "category": "Hackathon",
+    "venue": "Maker Space",
+    "start_date": "2026-11-08",
+    "end_date": "2026-11-09",
+    "event_url": "https://iotday.example.org",
+    "purpose": "Prototype a sensor-based monitoring system.",
+    "supporting_doc_url": "",
+    "status": "Submitted",
+    "overlap_flag": "",
+    "proctor_recommendation": null,
+    "proctor_remarks": "",
+    "final_remarks": "",
+    "approval_reference": "",
+    "override_used": "No",
+    "created_at": "2026-10-11",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "23EC002",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-11"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0013",
+    "reference_number": "TEP-2026-0013",
+    "roll_number": "23EC007",
+    "studentRoll": "23EC007",
+    "event_title": "Embedded Systems Coding Challenge",
+    "organizer": "EmbedCon",
+    "category": "Technical Competition",
+    "venue": "Hitech Auditorium",
+    "start_date": "2026-10-22",
+    "end_date": "2026-10-22",
+    "event_url": "https://embedcon.example.org",
+    "purpose": "One-day firmware coding contest.",
+    "supporting_doc_url": "Invitation_Mail.pdf",
+    "status": "Withdrawn",
+    "overlap_flag": "",
+    "proctor_recommendation": null,
+    "proctor_remarks": "",
+    "final_remarks": "Withdrawn by student - event no longer attended",
+    "approval_reference": "",
+    "override_used": "No",
+    "created_at": "2026-10-05",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "23EC007",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-05"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0014",
+    "reference_number": "TEP-2026-0014",
+    "roll_number": "23EC009",
+    "studentRoll": "23EC009",
+    "event_title": "5G & Wireless Communication Workshop",
+    "organizer": "Kerala Technical Forum",
+    "category": "Workshop",
+    "venue": "Tech Hall",
+    "start_date": "2026-12-03",
+    "end_date": "2026-12-04",
+    "event_url": "",
+    "purpose": "Understand 5G NR physical layer.",
+    "supporting_doc_url": "",
+    "status": "Draft",
+    "overlap_flag": "",
+    "proctor_recommendation": null,
+    "proctor_remarks": "",
+    "final_remarks": "",
+    "approval_reference": "",
+    "override_used": "No",
+    "created_at": "2026-10-11",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "23EC009",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-11"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0015",
+    "reference_number": "TEP-2026-0015",
+    "roll_number": "24AI001",
+    "studentRoll": "24AI001",
+    "event_title": "Prompt Engineering Workshop",
+    "organizer": "PromptCraft Academy",
+    "category": "Workshop",
+    "venue": "PromptCraft Studio",
+    "start_date": "2026-11-06",
+    "end_date": "2026-11-06",
+    "event_url": "https://promptcraft.example.org",
+    "purpose": "Single-day workshop on prompt design.",
+    "supporting_doc_url": "Registration_Confirmation.pdf",
+    "status": "Under Proctor Review",
+    "overlap_flag": "Overlaps TEP-2026-0001 (05-07 Nov)",
+    "proctor_recommendation": null,
+    "proctor_remarks": "",
+    "final_remarks": "",
+    "approval_reference": "",
+    "override_used": "No",
+    "created_at": "2026-10-11",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "24AI001",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-11"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0016",
+    "reference_number": "TEP-2026-0016",
+    "roll_number": "23EC010",
+    "studentRoll": "23EC010",
+    "event_title": "Industrial Visit - Satellite Communication Centre",
+    "organizer": "Space Applications Division",
+    "category": "Industrial Visit",
+    "venue": "Satellite Centre",
+    "start_date": "2026-11-18",
+    "end_date": "2026-11-18",
+    "event_url": "https://sac.example.org/visits",
+    "purpose": "Curriculum-linked visit for Satellite Communications elective.",
+    "supporting_doc_url": "HOD_Permission_Letter.pdf",
+    "status": "Recommended for Approval",
+    "overlap_flag": "",
+    "proctor_recommendation": "Recommend Approval",
+    "proctor_remarks": "Attendance 91.67%. Curriculum-linked.",
+    "final_remarks": "",
+    "approval_reference": "",
+    "override_used": "No",
+    "created_at": "2026-10-07",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "23EC010",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-07"
+      }
+    ]
+  },
+  {
+    "id": "TEP-2026-0017",
+    "reference_number": "TEP-2026-0017",
+    "roll_number": "24CS003",
+    "studentRoll": "24CS003",
+    "event_title": "HackVerse 2026",
+    "organizer": "DevConnect",
+    "category": "Hackathon",
+    "venue": "Hitex Exhibition Centre",
+    "start_date": "2026-12-05",
+    "end_date": "2026-12-06",
+    "event_url": "https://hackverse.example.org",
+    "purpose": "Team entry in the open-innovation track.",
+    "supporting_doc_url": "Registration_Confirmation.pdf",
+    "status": "Pending Final Decision",
+    "overlap_flag": "",
+    "proctor_recommendation": "Recommend Approval",
+    "proctor_remarks": "Attendance 92.00%. Good academic record.",
+    "final_remarks": "",
+    "approval_reference": "",
+    "override_used": "No",
+    "created_at": "2026-10-08",
+    "history": [
+      {
+        "action": "Submitted",
+        "performed_by": "24CS003",
+        "performed_by_name": "Student",
+        "performed_by_role": "Student",
+        "remarks": "Request submitted for proctor endorsement",
+        "to_status": "Submitted",
+        "timestamp": "2026-10-08"
+      }
+    ]
+  }
+];
+
+    // State
+    let currentStudentRoll = "24AI001";
+    let currentRequests = [];
+
+    // DOM Elements
+    const headerUserAvatar = document.getElementById("headerUserAvatar");
+    const headerUserName = document.getElementById("headerUserName");
+    const avatarLetter = document.getElementById("avatarLetter");
+    const studentDisplayName = document.getElementById("studentDisplayName");
+    const eligibilityPill = document.getElementById("eligibilityPill");
+    const studentMeta = document.getElementById("studentMeta");
+    const attendanceVal = document.getElementById("attendanceVal");
+    const attendanceDetail = document.getElementById("attendanceDetail");
+    const freshnessDetail = document.getElementById("freshnessDetail");
+    const totalRequestsVal = document.getElementById("totalRequestsVal");
+    const approvedVal = document.getElementById("approvedVal");
+    const tableBody = document.getElementById("studentRequestsTableBody");
+
+    const requestModal = document.getElementById("requestModal");
+    const modalHeading = document.getElementById("modalHeading");
+    const openSubmitModalBtn = document.getElementById("openSubmitModalBtn");
+    const closeSubmitModalBtn = document.getElementById("closeSubmitModalBtn");
+    const timelineModal = document.getElementById("timelineModal");
+    const closeTimelineBtn = document.getElementById("closeTimelineBtn");
+    const timelineContainer = document.getElementById("timelineContainer");
+
+    const eventSubmitForm = document.getElementById("eventSubmitForm");
+    const editingRequestId = document.getElementById("editingRequestId");
+    const submitFormBtn = document.getElementById("submitFormBtn");
+    const saveDraftBtn = document.getElementById("saveDraftBtn");
+    const startDateInput = document.getElementById("formStartDate");
+    const endDateInput = document.getElementById("formEndDate");
+    const overlapBanner = document.getElementById("overlapWarningBanner");
+
+    // Initialize session and fetch data
+    async function initDashboard() {
+      const authUserStr = localStorage.getItem("campusgate_auth_user");
+      if (authUserStr) {
+        try {
+          const authUser = JSON.parse(authUserStr);
+          if (authUser.rollNumber) {
+            currentStudentRoll = authUser.rollNumber.toUpperCase();
+          }
+        } catch (e) {}
+      }
+
+      await loadDashboardData();
+    }
+
+    async function loadDashboardData() {
+      let backendData = null;
+
+      // 1. Try relative backend path
+      try {
+        const resp = await fetch(`/api/student/dashboard?roll=${encodeURIComponent(currentStudentRoll)}`);
+        if (resp.ok) backendData = await resp.json();
+      } catch (e) {}
+
+      // 2. Try port 5000 if opened on static preview server
+      if (!backendData) {
+        try {
+          const resp = await fetch(`http://127.0.0.1:5000/api/student/dashboard?roll=${encodeURIComponent(currentStudentRoll)}`);
+          if (resp.ok) backendData = await resp.json();
+        } catch (e) {}
+      }
+
+      // 3. Live Backend Response
+      if (backendData && backendData.profile) {
+        renderProfile(backendData.profile, backendData.attendance);
+        renderMetrics(backendData.metrics);
+        currentRequests = backendData.requests || [];
+        renderTable(currentRequests);
+        return;
+      }
+
+      // 4. Client-side catalog fallback (offline / static mode)
+      renderOfflineDashboard();
+    }
+
+    function renderOfflineDashboard() {
+      const student = FALLBACK_STUDENTS.find(s => s.roll.toUpperCase() === currentStudentRoll.toUpperCase()) || FALLBACK_STUDENTS[0];
+      
+      const profile = {
+        roll_number: student.roll,
+        name: student.name,
+        dept: student.dept,
+        year: student.year || "II",
+        sec: student.sec || "A",
+        proctor_name: student.proctorName || (student.proctorId === "P02" ? "Dr. S. Lakshmi" : student.proctorId === "P03" ? "Prof. M. Venkat Rao" : "Dr. K. Ramesh")
+      };
+
+      const conducted = student.conducted;
+      const attended = student.attended;
+      const pct = (student.pct !== null && student.pct !== undefined) 
+        ? student.pct 
+        : (conducted ? (attended / conducted) * 100 : null);
+
+      let eligStatus = "Eligible";
+      if (student.status) {
+        eligStatus = student.status;
+      } else if (conducted === null || conducted === 0) {
+        eligStatus = "Unavailable";
+      } else if (pct < 75) {
+        eligStatus = "Ineligible";
+      }
+
+      const attendance = {
+        classes_conducted: conducted,
+        classes_attended: attended,
+        attendance_percentage: pct,
+        eligibility_status: eligStatus,
+        is_stale: student.asOf && student.asOf.startsWith("2026-07") ? 1 : 0,
+        missing_attendance: conducted === null ? 1 : 0,
+        threshold: 75,
+        data_as_of: student.asOf || "2026-10-10"
+      };
+
+      renderProfile(profile, attendance);
+
+      // Load local requests
+      let storedReqs = JSON.parse(localStorage.getItem("campusgate_event_requests_v2") || "null");
+      if (!storedReqs) {
+        storedReqs = FALLBACK_REQUESTS;
+        localStorage.setItem("campusgate_event_requests_v2", JSON.stringify(storedReqs));
+      }
+
+      currentRequests = storedReqs.filter(r => (r.roll_number || r.studentRoll || "").toUpperCase() === currentStudentRoll.toUpperCase());
+      const approvedCount = currentRequests.filter(r => r.status === "Approved").length;
+
+      renderMetrics({ total: currentRequests.length, approved: approvedCount });
+      renderTable(currentRequests);
+    }
+
+    function renderProfile(profile, attendance) {
+      if (!profile) return;
+      const initial = (profile.name || "S")[0].toUpperCase();
+      if (headerUserAvatar) headerUserAvatar.textContent = initial;
+      if (headerUserName) headerUserName.textContent = `${profile.name} (${profile.roll_number})`;
+      if (avatarLetter) avatarLetter.textContent = initial;
+      if (studentDisplayName) studentDisplayName.textContent = profile.name;
+
+      if (studentMeta) {
+        studentMeta.innerHTML = `Roll No: <strong>${profile.roll_number}</strong> &bull; Dept: <strong>${profile.dept || 'Engineering'}</strong> &bull; Sec: <strong>${profile.sec || 'A'}</strong> &bull; Proctor: <strong>${profile.proctor_name || 'Dr. K. Ramesh'}</strong>`;
+      }
+
+      // Attendance Metrics
+      let pctStr = "Unavailable";
+      let badgeClass = "status-unavailable";
+      let badgeText = "UNAVAILABLE";
+
+      if (attendance) {
+        if (attendance.missing_attendance === 1 || attendance.classes_conducted === null || attendance.classes_conducted === 0 || attendance.attendance_percentage === null) {
+          pctStr = "Unavailable";
+          badgeClass = "status-unavailable";
+          badgeText = "UNAVAILABLE";
+          attendanceDetail.textContent = "Missing from Department Master File";
+        } else {
+          pctStr = `${Number(attendance.attendance_percentage).toFixed(1)}%`;
+          attendanceDetail.textContent = `${attendance.classes_attended || 0} Attended / ${attendance.classes_conducted || 0} Conducted`;
+
+          if (attendance.is_stale === 1 || attendance.eligibility_status === "Stale - Verify") {
+            badgeClass = "status-stale";
+            badgeText = "STALE (Needs Verification)";
+          } else if (attendance.eligibility_status === "Eligible" || Number(attendance.attendance_percentage) >= 75) {
+            badgeClass = "status-eligible";
+            badgeText = `ELIGIBLE (≥${attendance.threshold || 75}%)`;
+          } else {
+            badgeClass = "status-ineligible";
+            badgeText = `INELIGIBLE (<${attendance.threshold || 75}%)`;
+          }
+        }
+
+        freshnessDetail.textContent = `Data as of: ${attendance.data_as_of || 'N/A'}`;
+      }
+
+      attendanceVal.textContent = pctStr;
+      eligibilityPill.className = `cg-status-pill ${badgeClass}`;
+      eligibilityPill.textContent = badgeText;
+    }
+
+    function renderMetrics(metrics) {
+      if (!metrics) return;
+      if (totalRequestsVal) totalRequestsVal.textContent = metrics.total;
+      if (approvedVal) approvedVal.textContent = metrics.approved;
+    }
+
+    function renderTable(requests) {
+      if (!tableBody) return;
+      if (!requests || requests.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--color-slate-400); padding: 2rem;">No event requests submitted yet. Click '+ Submit Event Request' to begin.</td></tr>`;
+        return;
+      }
+
+      tableBody.innerHTML = requests.map(r => {
+        let pillClass = "status-submitted";
+        if (r.status === "Approved") pillClass = "status-approved";
+        else if (r.status === "Rejected") pillClass = "status-rejected";
+        else if (r.status === "Returned for Correction") pillClass = "status-returned";
+        else if (r.status === "Draft") pillClass = "status-draft";
+        else if (r.status === "Withdrawn") pillClass = "status-withdrawn";
+        else if (r.status === "Pending Final Decision" || r.status === "Recommended for Approval") pillClass = "status-pending";
+
+        const hasOverlap = !!r.overlap_flag;
+        const canEdit = r.status === "Returned for Correction" || r.status === "Draft";
+        const canWithdraw = !["Approved", "Rejected", "Withdrawn"].includes(r.status);
+
+        return `
+          <tr>
+            <td><strong>${r.reference_number || r.id}</strong></td>
+            <td>
+              <div style="font-weight: 600;">${r.event_title || r.title}</div>
+              <small style="color: var(--color-slate-500);">${r.organizer || ''}</small>
+              ${hasOverlap ? '<div class="cg-status-pill status-warning" style="font-size: 0.7rem; margin-top: 3px;">⚠️ ' + r.overlap_flag + '</div>' : ''}
+            </td>
+            <td>${r.category}</td>
+            <td><small>${r.start_date || r.startDate} to ${r.end_date || r.endDate}</small></td>
+            <td><span class="cg-status-pill ${pillClass}">${r.status}</span></td>
+            <td>${r.proctor_recommendation ? '<strong>' + r.proctor_recommendation + '</strong><br><small style="color:#64748b;">' + (r.proctor_remarks || '') + '</small>' : '<span style="color:#94a3b8;">Pending</span>'}</td>
+            <td>
+              <small>${r.final_remarks || 'In Progress'}</small>
+              ${r.override_used === 'Yes' ? '<div style="color: #b45309; font-size: 0.75rem; font-weight: 600;">[Approved via Override]</div>' : ''}
+              ${r.approval_reference ? '<div style="color: #15803d; font-size: 0.75rem; font-weight: 600;">Ref: ' + r.approval_reference + '</div>' : ''}
+            </td>
+            <td>
+              <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+                <button class="cg-btn-sm cg-btn-outline view-timeline-btn" data-id="${r.id}">Timeline</button>
+                ${canEdit ? `<button class="cg-btn-sm cg-btn-warning edit-request-btn" data-id="${r.id}">Edit</button>` : ''}
+                ${canWithdraw ? `<button class="cg-btn-sm cg-btn-danger withdraw-btn" data-id="${r.id}">Withdraw</button>` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      // Wire Timeline Buttons
+      document.querySelectorAll(".view-timeline-btn").forEach(b => {
+        b.addEventListener("click", () => showTimeline(b.getAttribute("data-id")));
+      });
+
+      // Wire Edit Buttons
+      document.querySelectorAll(".edit-request-btn").forEach(b => {
+        b.addEventListener("click", () => openEditModal(b.getAttribute("data-id")));
+      });
+
+      // Wire Withdraw Buttons
+      document.querySelectorAll(".withdraw-btn").forEach(b => {
+        b.addEventListener("click", () => handleWithdraw(b.getAttribute("data-id")));
+      });
+    }
+
+    // Live Overlap Checker
+    async function checkDateOverlap() {
+      const s = startDateInput.value;
+      const e = endDateInput.value;
+      if (!s || !e) return;
+
+      const editId = editingRequestId.value;
+
+      // 1. Try Backend
+      try {
+        const resp = await fetch("/api/student/requests/check-overlaps", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ rollNumber: currentStudentRoll, startDate: s, endDate: e, excludeId: editId })
+        });
+        if (resp.ok) {
+          const res = await resp.json();
+          if (res.has_overlaps) {
+            overlapBanner.style.display = "block";
+            overlapBanner.innerHTML = `⚠️ <strong>Warning: Date overlap detected!</strong> You have ${res.conflicting_requests.length} existing request(s) on overlapping dates. Both proctor and in-charge will see this overlap flag.`;
+            return;
+          } else {
+            overlapBanner.style.display = "none";
+            return;
+          }
+        }
+      } catch (err) {}
+
+      // 2. Client-side overlap checker
+      const conflict = currentRequests.find(r => 
+        r.id !== editId &&
+        r.status !== "Rejected" &&
+        r.status !== "Withdrawn" &&
+        (s <= (r.end_date || r.endDate)) &&
+        (e >= (r.start_date || r.startDate))
+      );
+
+      if (conflict) {
+        overlapBanner.style.display = "block";
+        overlapBanner.innerHTML = `⚠️ <strong>Warning: Date overlap detected!</strong> Conflicting with <code>${conflict.reference_number || conflict.id}</code> (${conflict.event_title || conflict.title}). Both proctor and in-charge will see this overlap flag.`;
+      } else {
+        overlapBanner.style.display = "none";
+      }
+    }
+
+    startDateInput.addEventListener("change", checkDateOverlap);
+    endDateInput.addEventListener("change", checkDateOverlap);
+
+    // Modal Opening & Editing
+    openSubmitModalBtn.addEventListener("click", () => {
+      editingRequestId.value = "";
+      eventSubmitForm.reset();
+      overlapBanner.style.display = "none";
+      modalHeading.textContent = "Submit Technical Event Request";
+      submitFormBtn.textContent = "Submit for Proctor Review";
+      saveDraftBtn.style.display = "inline-block";
+      requestModal.classList.add("active");
+    });
+
+    closeSubmitModalBtn.addEventListener("click", () => requestModal.classList.remove("active"));
+    closeTimelineBtn.addEventListener("click", () => timelineModal.classList.remove("active"));
+
+    function openEditModal(id) {
+      const req = currentRequests.find(r => r.id === id);
+      if (!req) return;
+
+      editingRequestId.value = req.id;
+      modalHeading.textContent = `Edit Request — ${req.reference_number || req.id}`;
+      document.getElementById("formTitle").value = req.event_title || req.title || "";
+      document.getElementById("formOrganizer").value = req.organizer || "";
+      document.getElementById("formCategory").value = req.category || "Hackathon";
+      document.getElementById("formVenue").value = req.venue || "";
+      document.getElementById("formStartDate").value = req.start_date || req.startDate || "";
+      document.getElementById("formEndDate").value = req.end_date || req.endDate || "";
+      document.getElementById("formUrl").value = req.event_url || req.eventUrl || "";
+      document.getElementById("formPurpose").value = req.purpose || "";
+      document.getElementById("formDoc").value = req.supporting_doc_url || req.supportingDocument || "";
+
+      submitFormBtn.textContent = "Save & Resubmit";
+      saveDraftBtn.style.display = "none";
+      checkDateOverlap();
+      requestModal.classList.add("active");
+    }
+
+    // Submit Request (New or Update)
+    async function submitRequest(isDraft = false) {
+      const s = startDateInput.value;
+      const end = endDateInput.value;
+      if (!isDraft && new Date(end) < new Date(s)) {
+        alert("End date cannot be earlier than start date!");
+        return;
+      }
+
+      const editId = editingRequestId.value;
+      const formData = new FormData(eventSubmitForm);
+      formData.set("rollNumber", currentStudentRoll);
+      if (isDraft) formData.set("saveDraft", "true");
+
+      submitFormBtn.disabled = true;
+
+      // 1. Try Backend
+      let backendSuccess = false;
+      const urls = [
+        editId ? `/api/student/requests/${editId}` : "/api/student/requests",
+        editId ? `http://127.0.0.1:5000/api/student/requests/${editId}` : "http://127.0.0.1:5000/api/student/requests"
+      ];
+
+      for (const url of urls) {
+        try {
+          const resp = await fetch(url, { method: "POST", body: formData });
+          if (resp.ok) {
+            const res = await resp.json();
+            if (res.success) {
+              backendSuccess = true;
+              break;
+            }
+          }
+        } catch (e) {}
+      }
+
+      submitFormBtn.disabled = false;
+
+      if (backendSuccess) {
+        requestModal.classList.remove("active");
+        eventSubmitForm.reset();
+        overlapBanner.style.display = "none";
+        alert(editId ? "Request updated successfully!" : "Event Request submitted successfully!");
+        await loadDashboardData();
+        return;
+      }
+
+      // 2. Client-side LocalStorage Fallback
+      const hasOverlaps = overlapBanner.style.display === "block";
+      const newId = editId || ("req_" + Date.now());
+      const newRef = editId 
+        ? (currentRequests.find(r => r.id === editId)?.reference_number || editId)
+        : ("TEP-2026-" + Math.floor(1000 + Math.random() * 9000));
+      const newStatus = isDraft ? "Draft" : "Submitted";
+
+      const localObj = {
+        id: newId,
+        reference_number: newRef,
+        roll_number: currentStudentRoll,
+        studentRoll: currentStudentRoll,
+        event_title: document.getElementById("formTitle").value,
+        title: document.getElementById("formTitle").value,
+        organizer: document.getElementById("formOrganizer").value,
+        category: document.getElementById("formCategory").value,
+        venue: document.getElementById("formVenue").value,
+        start_date: s,
+        startDate: s,
+        end_date: end,
+        endDate: end,
+        event_url: document.getElementById("formUrl").value,
+        purpose: document.getElementById("formPurpose").value,
+        supporting_doc_url: document.getElementById("formDoc").value,
+        status: newStatus,
+        overlap_flag: hasOverlaps ? "Dates conflict with existing request" : "",
+        proctor_recommendation: null,
+        proctor_remarks: null,
+        final_remarks: hasOverlaps ? "Date overlap flagged" : "In Progress",
+        created_at: new Date().toISOString().slice(0, 10),
+        history: [
+          {
+            action: isDraft ? "Saved as Draft" : "Submitted for Proctor Review",
+            performed_by: currentStudentRoll,
+            performed_by_name: (headerUserName ? headerUserName.textContent.split(" (")[0] : "Student"),
+            performed_by_role: "Student",
+            remarks: isDraft ? "Draft saved by student" : "Event request submitted with supporting documents",
+            to_status: newStatus,
+            timestamp: new Date().toLocaleString()
+          }
+        ]
+      };
+
+      let allStored = JSON.parse(localStorage.getItem("campusgate_event_requests_v2") || "[]");
+      if (editId) {
+        allStored = allStored.map(r => r.id === editId ? { ...r, ...localObj } : r);
+      } else {
+        allStored.unshift(localObj);
+      }
+      localStorage.setItem("campusgate_event_requests_v2", JSON.stringify(allStored));
+
+      requestModal.classList.remove("active");
+      eventSubmitForm.reset();
+      overlapBanner.style.display = "none";
+      alert(editId ? "Request updated successfully!" : "Event Request submitted successfully!");
+      await loadDashboardData();
+    }
+
+    eventSubmitForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      submitRequest(false);
+    });
+
+    saveDraftBtn.addEventListener("click", () => {
+      submitRequest(true);
+    });
+
+    // Withdraw Request
+    async function handleWithdraw(id) {
+      const reason = prompt("Please provide a brief reason for withdrawing this request:");
+      if (reason === null) return;
+
+      // 1. Try Backend
+      let done = false;
+      const urls = [
+        `/api/student/requests/${id}/withdraw`,
+        `http://127.0.0.1:5000/api/student/requests/${id}/withdraw`
+      ];
+
+      for (const url of urls) {
+        try {
+          const resp = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ rollNumber: currentStudentRoll, reason: reason || "Withdrawn by student" })
+          });
+          if (resp.ok) {
+            const res = await resp.json();
+            if (res.success) { done = true; break; }
+          }
+        } catch (e) {}
+      }
+
+      // 2. Client-side fallback
+      if (!done) {
+        let allStored = JSON.parse(localStorage.getItem("campusgate_event_requests_v2") || "[]");
+        allStored = allStored.map(r => {
+          if (r.id === id) {
+            r.status = "Withdrawn";
+            r.history = r.history || [];
+            r.history.push({
+              action: "Request Withdrawn",
+              performed_by: currentStudentRoll,
+              performed_by_name: "Student",
+              performed_by_role: "Student",
+              remarks: reason || "Withdrawn by student",
+              to_status: "Withdrawn",
+              timestamp: new Date().toLocaleString()
+            });
+          }
+          return r;
+        });
+        localStorage.setItem("campusgate_event_requests_v2", JSON.stringify(allStored));
+      }
+
+      alert("Request has been withdrawn.");
+      await loadDashboardData();
+    }
+
+    // View Timeline Audit History
+    async function showTimeline(id) {
+      const req = currentRequests.find(r => r.id === id);
+      const title = document.getElementById("timelineModalTitle");
+      if (title && req) {
+        title.textContent = `Audit Trail — ${req.reference_number || req.id}`;
+      }
+
+      timelineContainer.innerHTML = `<div style="text-align: center; padding: 1.5rem; color: #94a3b8;">Loading audit history...</div>`;
+      timelineModal.classList.add("active");
+
+      // 1. Try Backend
+      let items = null;
+      const urls = [
+        `/api/student/requests/${id}/timeline`,
+        `http://127.0.0.1:5000/api/student/requests/${id}/timeline`
+      ];
+
+      for (const url of urls) {
+        try {
+          const resp = await fetch(url);
+          if (resp.ok) {
+            const res = await resp.json();
+            if (res.timeline) { items = res.timeline; break; }
+          }
+        } catch (e) {}
+      }
+
+      // 2. Client-side history fallback
+      if (!items) {
+        items = (req && req.history) ? req.history : [
+          {
+            action: "Submitted for Review",
+            performed_by_name: "Student",
+            performed_by_role: "Student",
+            remarks: "Event request filed with institutional documents",
+            timestamp: req ? (req.created_at || req.submittedOn) : "2026-10-01"
+          }
+        ];
+      }
+
+      if (items.length === 0) {
+        timelineContainer.innerHTML = `<div style="text-align: center; padding: 1.5rem; color: #94a3b8;">No audit entries found.</div>`;
+        return;
+      }
+
+      timelineContainer.innerHTML = items.map(h => `
+        <div class="cg-timeline-item">
+          <div class="cg-timeline-dot"></div>
+          <div class="cg-timeline-content">
+            <div class="cg-timeline-header">
+              <strong>${h.action || h.title || 'Event'}</strong>
+              <span class="cg-timeline-meta">${h.timestamp || h.time || ''}</span>
+            </div>
+            <div style="color: var(--color-blue-700); font-weight: 500; font-size: 0.85rem;">
+              ${h.performed_by_name || h.performed_by || h.by || 'User'} (${h.performed_by_role || 'User'})
+            </div>
+            <div style="margin-top: 0.35rem; color: var(--color-slate-700); font-size: 0.875rem;">
+              ${h.remarks || h.note || 'No remarks provided.'}
+            </div>
+            ${h.to_status ? `<div style="margin-top: 0.25rem; font-size: 0.75rem; color: #64748b;">Status changed to: <strong>${h.to_status}</strong></div>` : ''}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // Sign Out
+    document.getElementById("signOutLink").addEventListener("click", async (e) => {
+      e.preventDefault();
+      try {
+        await fetch("/api/auth/logout", { method: "POST" });
+      } catch (e) {}
+      localStorage.removeItem("campusgate_auth_user");
+      window.location.href = "student-login.html";
+    });
+
+    // Run on load
+    initDashboard();
+  </script>
+</body>
+</html>

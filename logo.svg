@@ -1,0 +1,27 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rounded Base Background with navy gradient -->
+  <rect width="48" height="48" rx="12" fill="url(#cg-logo-bg)"/>
+  
+  <!-- Campus Gateway Outer Arch & Pillars -->
+  <path d="M12 36V22C12 18.6863 14.6863 16 18 16H30C33.3137 16 36 18.6863 36 22V36" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Gateway Inner Pillars Detail -->
+  <path d="M17 36V23C17 21.3431 18.3431 20 20 20H28C29.6569 20 31 21.3431 31 23V36" stroke="#93C5FD" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Academic Graduation Cap Atop Arch -->
+  <path d="M24 10L14 15L24 20L34 15L24 10Z" fill="#38BDF8"/>
+  <path d="M34 15V21C34 21 32 23 32 24" stroke="#BAE6FD" stroke-width="1.8" stroke-linecap="round"/>
+  
+  <!-- Verification & Approval Checkmark in Gateway Heart -->
+  <path d="M21 28.5L23.5 31L27.5 26" stroke="#38BDF8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Base Ground Foundation -->
+  <path d="M9 36H39" stroke="#E2E8F0" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <defs>
+    <linearGradient id="cg-logo-bg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#1E3A8A"/>
+    </linearGradient>
+  </defs>
+</svg>

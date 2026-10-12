@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login — CampusGate</title>
+  <meta name="description" content="Student portal access for CampusGate academic event permission requests.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <script type="importmap">
+    {
+      "imports": {
+        "firebase/app": "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js",
+        "firebase/auth": "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js",
+        "firebase/firestore": "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js"
+      }
+    }
+  </script>
+</head>
+<body class="cg-auth-page">
+
+  <!-- Navigation Bar: Top-Left CampusGate Logo & Secondary Navigation -->
+  <header class="cg-header" role="banner">
+    <div class="cg-nav-container">
+      <!-- Top-Left Clickable Logo (Requirement 1) -->
+      <a href="index.html" class="cg-logo-link" aria-label="CampusGate Homepage">
+        <svg class="cg-logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="48" height="48" rx="12" fill="url(#nav-logo-bg)"/>
+          <path d="M12 36V22C12 18.6863 14.6863 16 18 16H30C33.3137 16 36 18.6863 36 22V36" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M17 36V23C17 21.3431 18.3431 20 20 20H28C29.6569 20 31 21.3431 31 23V36" stroke="#93C5FD" stroke-width="2" stroke-linecap="round"/>
+          <path d="M24 10L14 15L24 20L34 15L24 10Z" fill="#38BDF8"/>
+          <path d="M34 15V21C34 21 32 23 32 24" stroke="#BAE6FD" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M21 28.5L23.5 31L27.5 26" stroke="#38BDF8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 36H39" stroke="#E2E8F0" stroke-width="2.5" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="nav-logo-bg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#0F172A"/>
+              <stop offset="1" stop-color="#1E3A8A"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="cg-logo-text-group">
+          <div class="cg-logo-title">
+            <span class="navy">Campus</span><span class="blue">Gate</span>
+          </div>
+          <span class="cg-logo-tagline">Academic Permission Portal</span>
+        </div>
+      </a>
+
+      <!-- Secondary Navigation -->
+      <div class="cg-nav-actions">
+        <a href="index.html" class="cg-back-home-btn" aria-label="Return to CampusGate Home">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>Back to Home</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Login Card Area -->
+  <main class="cg-auth-main">
+    <div class="cg-login-card-container">
+      <div class="cg-card">
+        <!-- Header & Student Icon -->
+        <div class="cg-card-header">
+          <div class="cg-card-avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+          </div>
+          <h1 class="cg-card-title">Student Login</h1>
+          <p class="cg-card-subtitle">Sign in to apply for event permissions and track your approval status.</p>
+        </div>
+
+        <!-- Student Login Form -->
+        <form class="cg-auth-form" data-role="Student" novalidate>
+          <!-- Field 1: Official College Email or Roll Number -->
+          <div class="cg-form-group">
+            <label for="student-email" class="cg-form-label">Official College Email or Roll Number</label>
+            <div class="cg-input-wrapper">
+              <svg class="cg-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              <input 
+                type="text" 
+                inputmode="email"
+                id="student-email" 
+                name="email" 
+                class="cg-input" 
+                placeholder="e.g. 24ai001@techuniv.edu.in or 24AI001" 
+                required 
+                autocomplete="username"
+              >
+            </div>
+          </div>
+
+          <!-- Field 2: Password with Working Toggle -->
+          <div class="cg-form-group">
+            <label for="student-password" class="cg-form-label">Password</label>
+            <div class="cg-input-wrapper">
+              <svg class="cg-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <input 
+                type="password" 
+                id="student-password" 
+                name="password" 
+                class="cg-input cg-input-with-toggle" 
+                placeholder="Enter your student password" 
+                required 
+                autocomplete="current-password"
+              >
+              <button 
+                type="button" 
+                class="cg-password-toggle" 
+                data-target="student-password" 
+                aria-label="Show password"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Options: Remember Me & Forgot Password -->
+          <div class="cg-form-options">
+            <label class="cg-checkbox-label">
+              <input type="checkbox" name="remember" class="cg-checkbox">
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="cg-link cg-forgot-pwd-link">Forgot password?</a>
+          </div>
+
+          <!-- Primary Button: Sign In -->
+          <button type="submit" class="cg-btn cg-btn-primary cg-btn-full">
+            <span>Sign In</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+
+          <!-- Divider -->
+          <div class="cg-auth-divider">
+            <span>or</span>
+          </div>
+
+          <!-- Google Sign In Button -->
+          <button type="button" class="cg-btn cg-btn-google cg-btn-full cg-google-signin-btn" data-role="Student">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.665-5.17 3.665-9.12z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.26 21.36 7.33 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.13z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z"/>
+            </svg>
+            <span>Continue with Google</span>
+          </button>
+
+          <!-- Quick Fill Demo Accounts -->
+          <div style="margin-top: 1.25rem; padding: 0.85rem; background: var(--color-slate-100); border-radius: 8px; font-size: 0.825rem; border: 1px dashed var(--color-slate-300);">
+            <div style="font-weight: 600; color: var(--color-navy-950); margin-bottom: 0.45rem;">
+              ⚡ Quick Fill Test Accounts (Click to Fill & Sign In):
+            </div>
+            <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+              <button type="button" class="cg-btn-sm cg-btn-outline demo-pill" data-email="24ai001@techuniv.edu.in" data-pass="Stu@24AI001">24AI001 (Aarav, 90%)</button>
+              <button type="button" class="cg-btn-sm cg-btn-outline demo-pill" data-email="24cs002@techuniv.edu.in" data-pass="Stu@24CS002">24CS002 (Lavanya, 75%)</button>
+              <button type="button" class="cg-btn-sm cg-btn-outline demo-pill" data-email="24ai004@techuniv.edu.in" data-pass="Stu@24AI004">24AI004 (Meghana, 65%)</button>
+              <button type="button" class="cg-btn-sm cg-btn-outline demo-pill" data-email="24cs005@techuniv.edu.in" data-pass="Stu@24CS005">24CS005 (Unavailable)</button>
+              <button type="button" class="cg-btn-sm cg-btn-outline demo-pill" data-email="24cs009@techuniv.edu.in" data-pass="Stu@24CS009">24CS009 (Stale Data)</button>
+            </div>
+          </div>
+
+
+          <!-- Small Note -->
+          <div class="cg-auth-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>Authorized student accounts only.</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Forgot Password Modal -->
+  <div class="cg-modal-backdrop" id="cg-forgot-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="cg-modal">
+      <div class="cg-modal-header">
+        <h3 class="cg-modal-title" id="modal-title">Reset Student Password</h3>
+        <button class="cg-modal-close" aria-label="Close dialog">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <p style="font-size: 0.9rem; color: var(--color-slate-600); margin-bottom: 1.25rem;">
+        Enter your official college email address and we'll send you an institutional security recovery link.
+      </p>
+      <form id="cg-reset-form">
+        <div class="cg-form-group">
+          <label for="reset-email" class="cg-form-label">Official College Email</label>
+          <input type="email" id="reset-email" class="cg-input" placeholder="student.id@college.edu" required>
+        </div>
+        <button type="submit" class="cg-btn cg-btn-primary cg-btn-full">Send Recovery Link</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="cg-footer" role="contentinfo">
+    <div class="cg-footer-container">
+      <div class="cg-footer-bottom" style="padding-top: 0; border: none;">
+        <div>&copy; 2026 CampusGate Academic Management System.</div>
+        <div class="cg-status-indicator">
+          <span class="cg-status-dot"></span>
+          <span>Student Portal Active</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "campusgate",
+  "version": "1.0.0",
+  "description": "Technical Event Participation Approval and Attendance Monitoring Portal",
+  "type": "module",
+  "scripts": {
+    "test": "node test/acceptance-tests.js",
+    "seed": "node src/seed/seed-data.js"
+  },
+  "dependencies": {
+    "firebase": "^11.10.0",
+    "xlsx": "^0.18.5"
+  }
+}

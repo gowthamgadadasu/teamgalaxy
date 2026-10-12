@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusGate — Academic Event Permission Portal</title>
+  <meta name="description" content="Official University Academic Event Permission System connecting Students, Proctors, and Technical Event In-Charges.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+</head>
+<body>
+
+  <!-- Top-Left Aligned Header with CampusGate Brand -->
+  <header class="cg-header" role="banner">
+    <div class="cg-nav-container">
+      <!-- CampusGate Logo — Top Left & Clickable (Requirement 1) -->
+      <a href="index.html" class="cg-logo-link" aria-label="CampusGate Homepage">
+        <svg class="cg-logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="48" height="48" rx="12" fill="url(#nav-logo-bg)"/>
+          <path d="M12 36V22C12 18.6863 14.6863 16 18 16H30C33.3137 16 36 18.6863 36 22V36" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M17 36V23C17 21.3431 18.3431 20 20 20H28C29.6569 20 31 21.3431 31 23V36" stroke="#93C5FD" stroke-width="2" stroke-linecap="round"/>
+          <path d="M24 10L14 15L24 20L34 15L24 10Z" fill="#38BDF8"/>
+          <path d="M34 15V21C34 21 32 23 32 24" stroke="#BAE6FD" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M21 28.5L23.5 31L27.5 26" stroke="#38BDF8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 36H39" stroke="#E2E8F0" stroke-width="2.5" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="nav-logo-bg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#0F172A"/>
+              <stop offset="1" stop-color="#1E3A8A"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="cg-logo-text-group">
+          <div class="cg-logo-title">
+            <span class="navy">Campus</span><span class="blue">Gate</span>
+          </div>
+          <span class="cg-logo-tagline">Academic Permission Portal</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="cg-nav-menu" role="navigation" aria-label="Main Navigation">
+        <a href="index.html" class="cg-nav-link active">Home</a>
+        <a href="#roles" class="cg-nav-link">Select Role</a>
+        <a href="#how-it-works" class="cg-nav-link">Workflow</a>
+        <a href="#security" class="cg-nav-link">Security</a>
+      </nav>
+
+      <!-- Nav Actions -->
+      <div class="cg-nav-actions">
+        <a href="#roles" class="cg-btn cg-btn-primary" style="padding: 0.55rem 1.15rem; font-size: 0.88rem;">
+          Portal Sign In
+        </a>
+        <button class="cg-mobile-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main>
+    <section class="cg-hero-section">
+      <div class="cg-badge-pill">
+        <span class="cg-badge-pill-dot"></span>
+        Official University Clearance System
+      </div>
+      <h1 class="cg-hero-title">
+        Streamlined Academic & Technical <span class="highlight">Event Permissions</span>
+      </h1>
+      <p class="cg-hero-subtitle">
+        A unified digital gateway connecting Students, Proctors, and Technical Event In-Charges for transparent, rapid, and verifiable event approvals.
+      </p>
+    </section>
+
+    <!-- Role Selection Section (Requirement 2: Smooth Hover Effects) -->
+    <section class="cg-roles-section" id="roles" aria-labelledby="roles-heading">
+      <div class="cg-roles-header">
+        <h2 id="roles-heading">Select Your Portal Role</h2>
+        <p>Choose your authorized academic role to access your dedicated sign-in portal.</p>
+      </div>
+
+      <div class="cg-roles-grid">
+        <!-- 1. Student Card -->
+        <article class="cg-role-card">
+          <span class="cg-role-card-badge">Applicant</span>
+          <div class="cg-role-icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+          </div>
+          <h3 class="cg-role-title">Student</h3>
+          <p class="cg-role-desc">
+            Submit event participation requests, upload technical event details, and track your multi-stage approval status in real-time.
+          </p>
+          <a href="student-login.html" class="cg-role-btn">
+            <span>Login as Student</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </article>
+
+        <!-- 2. Proctor Card (Requirement 3: Strict Proctor Terminology) -->
+        <article class="cg-role-card">
+          <span class="cg-role-card-badge">Reviewer</span>
+          <div class="cg-role-icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <polyline points="17 11 19 13 23 9"></polyline>
+            </svg>
+          </div>
+          <h3 class="cg-role-title">Proctor</h3>
+          <p class="cg-role-desc">
+            Sign in to review your assigned students and their event permission requests based on academic attendance and standing.
+          </p>
+          <a href="proctor-login.html" class="cg-role-btn">
+            <span>Login as Proctor</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </article>
+
+        <!-- 3. Technical Event In-Charge Card -->
+        <article class="cg-role-card">
+          <span class="cg-role-card-badge">Final Authority</span>
+          <div class="cg-role-icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <polyline points="9 12 11 14 15 10"></polyline>
+            </svg>
+          </div>
+          <h3 class="cg-role-title">Technical Event In-Charge</h3>
+          <p class="cg-role-desc">
+            Review proctor recommendations and manage technical event permission decisions through a transparent approval process.
+          </p>
+          <a href="incharge-login.html" class="cg-role-btn">
+            <span>Login as In-Charge</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section class="cg-workflow-section" id="how-it-works">
+      <div class="cg-workflow-container">
+        <div class="cg-section-title-center">
+          <h3>The Three-Tier Approval Lifecycle</h3>
+          <p>Every permission follows an accountable, institutional sequence.</p>
+        </div>
+
+        <div class="cg-steps-grid">
+          <div class="cg-step-item">
+            <div class="cg-step-num">1</div>
+            <h4 class="cg-step-title">Student Submits Request</h4>
+            <p class="cg-step-desc">Students initiate the request with event brochures, date ranges, and technical contest documentation.</p>
+          </div>
+
+          <div class="cg-step-item">
+            <div class="cg-step-num">2</div>
+            <h4 class="cg-step-title">Proctor Verification</h4>
+            <p class="cg-step-desc">The designated proctor evaluates student eligibility, verifies attendance criteria, and appends official recommendation.</p>
+          </div>
+
+          <div class="cg-step-item">
+            <div class="cg-step-num">3</div>
+            <h4 class="cg-step-title">In-Charge Final Decision</h4>
+            <p class="cg-step-desc">The Technical Event In-Charge grants formal authorization and generates a verifiable clearance pass.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Uniform Footer -->
+  <footer class="cg-footer" id="security" role="contentinfo">
+    <div class="cg-footer-container">
+      <div class="cg-footer-top">
+        <div class="cg-footer-brand">
+          <div class="cg-logo-title" style="margin-bottom: 0.5rem;">
+            <span class="navy">Campus</span><span class="blue">Gate</span>
+          </div>
+          <p class="cg-footer-desc">
+            Authorized university infrastructure for institutional academic and technical event clearance workflows.
+          </p>
+        </div>
+
+        <div class="cg-footer-links-group">
+          <div class="cg-footer-col">
+            <h4>Access Portals</h4>
+            <ul>
+              <li><a href="student-login.html">Student Sign In</a></li>
+              <li><a href="proctor-login.html">Proctor Sign In</a></li>
+              <li><a href="incharge-login.html">Technical Event In-Charge</a></li>
+            </ul>
+          </div>
+          <div class="cg-footer-col">
+            <h4>Portal Standards</h4>
+            <ul>
+              <li><a href="#security">Institutional Security</a></li>
+              <li><a href="#how-it-works">Approval Workflow</a></li>
+              <li><a href="#">Audit Protocols</a></li>
+            </ul>
+          </div>
+          <div class="cg-footer-col">
+            <h4>Support</h4>
+            <ul>
+              <li><a href="#">IT Help Desk</a></li>
+              <li><a href="#">Dean of Academics</a></li>
+              <li><a href="#">System Administrator</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="cg-footer-bottom">
+        <div>&copy; 2026 CampusGate Academic Management System. All rights reserved.</div>
+        <div class="cg-status-indicator">
+          <span class="cg-status-dot"></span>
+          <span>Gateway Active &bull; v2.4 Release</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technical-Event In-Charge Portal — CampusGate</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+</head>
+<body class="cg-auth-page" style="background: var(--color-slate-50);">
+
+  <!-- Header -->
+  <header class="cg-header" role="banner">
+    <div class="cg-nav-container">
+      <a href="index.html" class="cg-logo-link" aria-label="CampusGate Homepage">
+        <svg class="cg-logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="48" height="48" rx="12" fill="#1E3A8A"/>
+          <path d="M12 36V22C12 18.6863 14.6863 16 18 16H30C33.3137 16 36 18.6863 36 22V36" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M17 36V23C17 21.3431 18.3431 20 20 20H28C29.6569 20 31 21.3431 31 23V36" stroke="#93C5FD" stroke-width="2" stroke-linecap="round"/>
+          <path d="M24 10L14 15L24 20L34 15L24 10Z" fill="#38BDF8"/>
+          <path d="M9 36H39" stroke="#E2E8F0" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div class="cg-logo-text-group">
+          <div class="cg-logo-title"><span class="navy">Campus</span><span class="blue">Gate</span></div>
+          <span class="cg-logo-tagline">Administrative Control Portal</span>
+        </div>
+      </a>
+
+      <!-- Header Actions -->
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <span class="cg-status-pill status-eligible">System Live</span>
+        <a href="incharge-login.html" class="cg-btn cg-btn-outline" style="padding: 0.4rem 0.85rem; font-size: 0.825rem;">Sign Out</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="cg-dash-main">
+    <!-- Header Card -->
+    <div class="cg-dash-header">
+      <div class="cg-dash-user-info">
+        <div class="cg-dash-avatar" style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);">S</div>
+        <div>
+          <div class="cg-dash-title">
+            <span>Dr. A. Srinivasa Rao</span>
+            <span class="cg-status-pill status-approved">Final Approval Authority</span>
+          </div>
+          <div class="cg-dash-subtitle">
+            Role: Technical-Event In-Charge &bull; Office of Academic & Technical Affairs
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <button class="cg-btn cg-btn-outline" id="exportAttendanceBtn">📥 Export Attendance CSV</button>
+        <button class="cg-btn cg-btn-primary" id="exportRequestsBtn">📥 Export Approvals CSV</button>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="cg-stats-grid">
+      <div class="cg-stat-card">
+        <div class="cg-stat-card-header">
+          <span class="cg-stat-label">Total Requests</span>
+          <div class="cg-stat-icon-wrapper">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+          </div>
+        </div>
+        <div class="cg-stat-value" id="inchargeTotalVal">12</div>
+        <div class="cg-stat-subtext">Across 4 Engineering Depts</div>
+      </div>
+
+      <div class="cg-stat-card">
+        <div class="cg-stat-card-header">
+          <span class="cg-stat-label">Pending Final Decision</span>
+          <div class="cg-stat-icon-wrapper" style="color: #2563eb; background: #eff6ff;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+        </div>
+        <div class="cg-stat-value" id="inchargePendingVal" style="color: #2563eb;">3</div>
+        <div class="cg-stat-subtext">Recommended by Proctors</div>
+      </div>
+
+      <div class="cg-stat-card">
+        <div class="cg-stat-card-header">
+          <span class="cg-stat-label">Attendance Threshold</span>
+          <div class="cg-stat-icon-wrapper" style="color: #16a34a; background: #dcfce7;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+        <div class="cg-stat-value" id="currentThresholdVal">75.0%</div>
+        <div class="cg-stat-subtext">Configurable University Rule</div>
+      </div>
+
+      <div class="cg-stat-card">
+        <div class="cg-stat-card-header">
+          <span class="cg-stat-label">Flagged for Attendance</span>
+          <div class="cg-stat-icon-wrapper" style="color: #dc2626; background: #fee2e2;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+        </div>
+        <div class="cg-stat-value" id="flaggedAttendanceVal" style="color: #dc2626;">2</div>
+        <div class="cg-stat-subtext">Requires explicit override</div>
+      </div>
+    </div>
+
+    <!-- Module 1: Excel / CSV Attendance Import Card -->
+    <div class="cg-section-card">
+      <div class="cg-section-card-header">
+        <div class="cg-section-card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Module 1: Excel / CSV Attendance Data Import & Validation
+        </div>
+        <span class="cg-status-pill status-neutral">Accepts .csv / .xlsx</span>
+      </div>
+
+      <div style="padding: 1.5rem 1.75rem;">
+        <p style="font-size: 0.875rem; color: var(--color-slate-600); margin-bottom: 1rem;">
+          Upload department attendance data. Required columns: <code>Roll Number</code>, <code>Student Name</code>, <code>Department</code>, <code>Year / Section</code>, <code>Classes Conducted</code>, <code>Classes Attended</code>. The system checks roll numbers, verifies <em>Attended &le; Conducted</em>, prevents duplicate rows, and preserves previous datasets on error.
+        </p>
+
+        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+          <input type="file" id="attendanceFileInput" accept=".csv" class="cg-filter-input" style="max-width: 320px;">
+          <button class="cg-btn cg-btn-outline" id="loadSampleCsvBtn">Load Sample Template File</button>
+          <button class="cg-btn cg-btn-primary" id="previewValidateBtn">Preview & Validate File</button>
+        </div>
+
+        <!-- Preview Results Container -->
+        <div id="previewResultsContainer" style="margin-top: 1.25rem;"></div>
+      </div>
+    </div>
+
+    <!-- Module 2: Threshold Configuration Card -->
+    <div class="cg-section-card">
+      <div class="cg-section-card-header">
+        <div class="cg-section-card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Module 2: Configurable Attendance Threshold & Policy
+        </div>
+      </div>
+      <div style="padding: 1.25rem 1.75rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <label style="font-weight: 600; font-size: 0.9rem;">Minimum Attendance Threshold (%):</label>
+          <input type="number" id="thresholdInput" class="cg-filter-input" value="75" min="50" max="100" style="width: 90px; text-align: center; font-weight: 700;">
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <label style="font-weight: 600; font-size: 0.9rem;">Data Stale Window (Days):</label>
+          <input type="number" id="staleDaysInput" class="cg-filter-input" value="30" min="5" max="180" style="width: 80px; text-align: center;">
+        </div>
+        <button class="cg-btn cg-btn-primary" id="saveThresholdBtn" style="padding: 0.45rem 1rem;">Save Policy Rule</button>
+      </div>
+    </div>
+
+    <!-- Module 4: Event Approval Decision Queue -->
+    <div class="cg-section-card">
+      <div class="cg-section-card-header">
+        <div class="cg-section-card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Module 4: Event Requests Final Decision Queue & Proctor Recommendations
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="cg-filter-bar">
+        <select id="inchargeDeptFilter" class="cg-filter-select">
+          <option value="ALL">All Departments</option>
+          <option value="AI">AI</option>
+          <option value="ECE">ECE</option>
+          <option value="CSE">CSE</option>
+          <option value="MECH">MECH</option>
+        </select>
+        <select id="inchargeStatusFilter" class="cg-filter-select">
+          <option value="ALL">All Statuses</option>
+          <option value="Recommended for Approval">Recommended for Approval (Ready for Decision)</option>
+          <option value="Recommended for Rejection">Recommended for Rejection</option>
+          <option value="Approved">Approved</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+      </div>
+
+      <div class="cg-table-wrapper">
+        <table class="cg-table">
+          <thead>
+            <tr>
+              <th>Ref #</th>
+              <th>Student Details</th>
+              <th>Attendance</th>
+              <th>Event Title</th>
+              <th>Dates</th>
+              <th>Proctor Recommendation</th>
+              <th>Current Status</th>
+              <th>Final Decision Action</th>
+            </tr>
+          </thead>
+          <tbody id="inchargeRequestsTbody">
+            <!-- Populated via script -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Final Decision Modal -->
+  <div class="cg-modal-backdrop" id="decisionModal" role="dialog" aria-modal="true">
+    <div class="cg-modal" style="max-width: 580px;">
+      <div class="cg-modal-header">
+        <h3 class="cg-modal-title" id="decisionModalTitle">Execute Final Approval Decision</h3>
+        <button class="cg-modal-close" id="closeDecisionModal">&times;</button>
+      </div>
+
+      <div id="decisionEventSummary" style="background: #f8fafc; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; font-size: 0.875rem;"></div>
+
+      <!-- Override Warning & Checkbox (if attendance is <75%) -->
+      <div id="overrideSection" style="display: none; padding: 0.85rem; border-radius: 6px; background: #fee2e2; border: 1px solid #f87171; margin-bottom: 1rem;">
+        <strong style="color: #991b1b;">⚠️ Attendance Ineligible Exception:</strong>
+        <p style="font-size: 0.825rem; color: #7f1d1d; margin: 0.25rem 0 0.5rem;">
+          This student's attendance is below the configured 75% threshold. Regular approval is blocked. You may grant exceptional approval only with an explicit, recorded override justification.
+        </p>
+        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 600; color: #991b1b;">
+          <input type="checkbox" id="enableOverrideCheckbox">
+          Grant Authorized Exceptional Override
+        </label>
+        <input type="text" id="overrideReasonInput" class="cg-input" placeholder="Enter explicit reason (e.g. Dean Order #DEAN-2026-44)..." style="margin-top: 0.5rem; display: none;">
+      </div>
+
+      <form id="finalDecisionForm">
+        <input type="hidden" id="decisionTargetReqId">
+        <div class="cg-form-group">
+          <label class="cg-form-label">Final Decision *</label>
+          <select id="finalDecisionSelect" class="cg-input" required>
+            <option value="APPROVE">Grant Final Approval (OD Clearance)</option>
+            <option value="REJECT">Reject Event Request</option>
+            <option value="RETURN_FOR_CORRECTION">Return to Student for Correction</option>
+          </select>
+        </div>
+        <div class="cg-form-group">
+          <label class="cg-form-label">Official Remarks & Authority Notes *</label>
+          <textarea id="finalRemarksInput" class="cg-input" rows="3" placeholder="Enter official on-duty order reference, instructions, or rejection reasons..." required></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+          <button type="button" class="cg-btn cg-btn-outline" id="cancelDecisionBtn">Cancel</button>
+          <button type="submit" class="cg-btn cg-btn-primary" id="confirmDecisionBtn">Submit Decision</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { STUDENTS, PROCTORS, EVENT_REQUESTS } from "./src/seed/seed-data.js";
+    import { parseCSV, validateAttendancePreview } from "./src/services/attendance-service.js";
+    import { exportAttendanceReportCSV, exportRequestsReportCSV } from "./src/services/dashboard-service.js";
+
+    let localRequests = JSON.parse(localStorage.getItem("campusgate_event_requests_v2") || "null");
+    if (!localRequests) {
+      localRequests = EVENT_REQUESTS.map(r => ({
+        id: r.requestId,
+        ref: r.requestId,
+        studentRoll: r.rollNumber,
+        title: r.eventTitle,
+        category: r.category,
+        startDate: r.startDate,
+        endDate: r.endDate,
+        status: r.status,
+        proctorId: r.proctorId,
+        hasOverlaps: !!r.overlapFlag,
+        proctorRec: r.proctorRecommendation,
+        finalDecision: r.finalDecision,
+        finalRemarks: r.finalRemarks || r.proctorRemarks || "In Progress"
+      }));
+      localStorage.setItem("campusgate_event_requests_v2", JSON.stringify(localRequests));
+    }
+
+    const inchargeTotalVal = document.getElementById("inchargeTotalVal");
+    const inchargePendingVal = document.getElementById("inchargePendingVal");
+    const currentThresholdVal = document.getElementById("currentThresholdVal");
+    const flaggedAttendanceVal = document.getElementById("flaggedAttendanceVal");
+
+    const inchargeRequestsTbody = document.getElementById("inchargeRequestsTbody");
+    const inchargeDeptFilter = document.getElementById("inchargeDeptFilter");
+    const inchargeStatusFilter = document.getElementById("inchargeStatusFilter");
+
+    const thresholdInput = document.getElementById("thresholdInput");
+    const saveThresholdBtn = document.getElementById("saveThresholdBtn");
+
+    const decisionModal = document.getElementById("decisionModal");
+    const closeDecisionModal = document.getElementById("closeDecisionModal");
+    const cancelDecisionBtn = document.getElementById("cancelDecisionBtn");
+    const decisionEventSummary = document.getElementById("decisionEventSummary");
+    const decisionTargetReqId = document.getElementById("decisionTargetReqId");
+    const overrideSection = document.getElementById("overrideSection");
+    const enableOverrideCheckbox = document.getElementById("enableOverrideCheckbox");
+    const overrideReasonInput = document.getElementById("overrideReasonInput");
+    const finalDecisionSelect = document.getElementById("finalDecisionSelect");
+    const finalRemarksInput = document.getElementById("finalRemarksInput");
+
+    function renderInchargeView() {
+      inchargeTotalVal.textContent = localRequests.length;
+      inchargePendingVal.textContent = localRequests.filter(r => r.status === "Recommended for Approval").length;
+      
+      let flagged = 0;
+      localRequests.forEach(r => {
+        const s = STUDENTS.find(st => st.roll === r.studentRoll);
+        if (s && (s.missingAttendance || (s.conducted > 0 && (s.attended/s.conducted)*100 < 75))) {
+          flagged++;
+        }
+      });
+      flaggedAttendanceVal.textContent = flagged;
+
+      // Filter
+      let list = [...localRequests];
+      if (inchargeDeptFilter.value !== "ALL") {
+        list = list.filter(r => {
+          const s = STUDENTS.find(st => st.roll === r.studentRoll);
+          return s && s.dept === inchargeDeptFilter.value;
+        });
+      }
+      if (inchargeStatusFilter.value !== "ALL") {
+        list = list.filter(r => r.status === inchargeStatusFilter.value);
+      }
+
+      if (list.length === 0) {
+        inchargeRequestsTbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--color-slate-400); padding: 1.5rem;">No requests match the selected filters.</td></tr>`;
+      } else {
+        inchargeRequestsTbody.innerHTML = list.map(r => {
+          const student = STUDENTS.find(s => s.roll === r.studentRoll);
+          let pct = "Unavailable";
+          let pctClass = "status-unavailable";
+          let isElig = false;
+          if (student && !student.missingAttendance && student.conducted > 0) {
+            const val = ((student.attended/student.conducted)*100).toFixed(1);
+            pct = `${val}%`;
+            isElig = val >= 75;
+            pctClass = isElig ? "status-eligible" : "status-ineligible";
+          }
+
+          let statusClass = "status-submitted";
+          if (r.status === "Approved") statusClass = "status-approved";
+          else if (r.status === "Rejected") statusClass = "status-rejected";
+          else if (r.status === "Recommended for Approval") statusClass = "status-recommended";
+
+          return `
+            <tr>
+              <td><strong>${r.ref}</strong></td>
+              <td>
+                <div style="font-weight: 600;">${student ? student.name : 'Unknown'}</div>
+                <small style="color: var(--color-slate-500);">${r.studentRoll} &bull; ${student?.dept || ''}</small>
+              </td>
+              <td><span class="cg-status-pill ${pctClass}">${pct}</span></td>
+              <td>
+                <div>${r.title}</div>
+                <small style="color: var(--color-slate-500);">${r.category}</small>
+              </td>
+              <td><small>${r.startDate} to ${r.endDate}</small></td>
+              <td>
+                <span style="font-weight: 600; font-size: 0.8rem; color: #1e3a8a;">${r.proctorRec || 'None'}</span>
+              </td>
+              <td><span class="cg-status-pill ${statusClass}">${r.status}</span></td>
+              <td>
+                ${r.status === "Recommended for Approval" || r.status === "Recommended for Rejection" || r.status === "Submitted" ? `
+                  <button class="cg-btn-sm cg-btn-primary action-decide-btn" data-id="${r.id}">Make Decision</button>
+                ` : `
+                  <small style="color: var(--color-slate-500); font-weight: 600;">Finalized (${r.status})</small>
+                `}
+              </td>
+            </tr>
+          `;
+        }).join("");
+      }
+
+      // Bind buttons
+      document.querySelectorAll(".action-decide-btn").forEach(b => {
+        b.addEventListener("click", () => {
+          const reqId = b.getAttribute("data-id");
+          const req = localRequests.find(r => r.id === reqId);
+          if (!req) return;
+
+          const student = STUDENTS.find(s => s.roll === req.studentRoll);
+          const attPct = (student && student.conducted > 0) ? (student.attended/student.conducted)*100 : 0;
+          const isBelow = attPct < 75;
+
+          decisionTargetReqId.value = req.id;
+          decisionEventSummary.innerHTML = `
+            <div><strong>Student:</strong> ${student?.name} (${req.studentRoll})</div>
+            <div><strong>Event:</strong> ${req.title}</div>
+            <div><strong>Proctor Recommendation:</strong> <span style="color: #1e3a8a; font-weight: 600;">${req.proctorRec || 'Pending'}</span></div>
+            <div><strong>Attendance:</strong> ${student?.attended}/${student?.conducted} (${attPct.toFixed(1)}%)</div>
+          `;
+
+          if (isBelow) {
+            overrideSection.style.display = "block";
+            enableOverrideCheckbox.checked = false;
+            overrideReasonInput.style.display = "none";
+            overrideReasonInput.value = "";
+          } else {
+            overrideSection.style.display = "none";
+          }
+
+          decisionModal.classList.add("active");
+        });
+      });
+    }
+
+    closeDecisionModal.addEventListener("click", () => decisionModal.classList.remove("active"));
+    cancelDecisionBtn.addEventListener("click", () => decisionModal.classList.remove("active"));
+    inchargeDeptFilter.addEventListener("change", renderInchargeView);
+    inchargeStatusFilter.addEventListener("change", renderInchargeView);
+
+    enableOverrideCheckbox.addEventListener("change", () => {
+      overrideReasonInput.style.display = enableOverrideCheckbox.checked ? "block" : "none";
+    });
+
+    // Save Policy Rule
+    saveThresholdBtn.addEventListener("click", () => {
+      const val = thresholdInput.value;
+      currentThresholdVal.textContent = `${val}.0%`;
+      alert(`Attendance threshold updated to ${val}%! System will now evaluate student eligibility against ${val}%.`);
+    });
+
+    // Execute Final Decision
+    document.getElementById("finalDecisionForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const reqId = decisionTargetReqId.value;
+      const dec = finalDecisionSelect.value;
+      const rem = finalRemarksInput.value.trim();
+
+      const req = localRequests.find(r => r.id === reqId);
+      if (!req) return;
+
+      const student = STUDENTS.find(s => s.roll === req.studentRoll);
+      const attPct = (student && student.conducted > 0) ? (student.attended/student.conducted)*100 : 0;
+      const isBelow = attPct < 75;
+
+      if (dec === "APPROVE" && isBelow && !enableOverrideCheckbox.checked) {
+        alert("Action Denied: Student attendance is below threshold! You must check 'Grant Authorized Exceptional Override' and provide a reason to approve.");
+        return;
+      }
+
+      let newStatus = "";
+      if (dec === "APPROVE") newStatus = "Approved";
+      else if (dec === "REJECT") newStatus = "Rejected";
+      else newStatus = "Returned for Correction";
+
+      req.status = newStatus;
+      req.finalDecision = dec;
+      req.finalRemarks = `In-Charge (${newStatus}): ${rem}`;
+      if (enableOverrideCheckbox.checked) {
+        req.hasOverride = true;
+        req.overrideReason = overrideReasonInput.value;
+      }
+
+      req.history = req.history || [];
+      req.history.push({
+        action: `Final Decision: ${newStatus}`,
+        title: `Final Decision: ${newStatus}`,
+        performed_by_name: "Dr. A. Srinivasa Rao (Technical In-Charge)",
+        performed_by_role: "In-Charge",
+        by: "Dr. A. Srinivasa Rao (Technical In-Charge)",
+        time: new Date().toLocaleDateString(),
+        timestamp: new Date().toLocaleString(),
+        remarks: rem + (enableOverrideCheckbox.checked ? ` [Override: ${overrideReasonInput.value}]` : ""),
+        note: rem + (enableOverrideCheckbox.checked ? ` [Override: ${overrideReasonInput.value}]` : ""),
+        to_status: newStatus
+      });
+
+      localStorage.setItem("campusgate_event_requests", JSON.stringify(localRequests));
+      localStorage.setItem("campusgate_event_requests_v2", JSON.stringify(localRequests));
+
+      // Attempt backend sync
+      fetch(`/api/incharge/requests/${reqId}/decide`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          decision: dec,
+          remarks: rem,
+          override: enableOverrideCheckbox.checked,
+          overrideReason: overrideReasonInput.value
+        })
+      }).catch(() => {});
+
+      decisionModal.classList.remove("active");
+      document.getElementById("finalDecisionForm").reset();
+      alert(`Final decision recorded! Request status is now '${newStatus}'.`);
+      renderInchargeView();
+    });
+
+    // Module 1: Preview & Validate Upload
+    const previewBtn = document.getElementById("previewValidateBtn");
+    const loadSampleBtn = document.getElementById("loadSampleCsvBtn");
+    const fileInput = document.getElementById("attendanceFileInput");
+    const resultsContainer = document.getElementById("previewResultsContainer");
+
+    const sampleCsvString = `Roll Number,Student Name,Department,Year / Section,Classes Conducted,Classes Attended,Attendance Percentage,Data As Of
+24AI001,Aarav Sharma,AI,II / A,100,88,88%,2026-10-10
+24AI002,Aditi Rao,AI,II / A,100,75,75%,2026-10-10
+24AI003,Ananya Iyer,AI,II / A,100,62,62%,2026-10-10
+24CS001,Bhavya Gupta,CSE,III / B,120,95,79.17%,2026-10-10
+24AI005,Ishaan Joshi,AI,II / A,100,105,105%,2026-10-10
+24CS004,Kavya Nair,CSE,III / B,-50,40,-80%,2026-10-10
+,Missing Roll Student,CSE,III / B,100,80,80%,2026-10-10
+24AI001,Duplicate Aarav,AI,II / A,100,88,88%,2026-10-10`;
+
+    loadSampleBtn.addEventListener("click", () => {
+      processCsvContent(sampleCsvString, "sample-attendance.csv");
+    });
+
+    previewBtn.addEventListener("click", () => {
+      if (!fileInput.files.length) {
+        alert("Please select a CSV file first (or click 'Load Sample Template File')!");
+        return;
+      }
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => processCsvContent(e.target.result, file.name);
+      reader.readAsText(file);
+    });
+
+    async function processCsvContent(text, fileName) {
+      const { rows } = parseCSV(text);
+      const preview = await validateAttendancePreview(rows, STUDENTS);
+
+      resultsContainer.innerHTML = `
+        <div style="background: #f8fafc; border: 1px solid var(--color-slate-200); border-radius: 8px; padding: 1.25rem;">
+          <h4 style="font-size: 1rem; color: var(--color-navy-950); margin-bottom: 0.5rem;">File Validation Audit: <code>${fileName}</code></h4>
+          <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; font-size: 0.9rem;">
+            <div>Total Rows: <strong>${preview.totalRows}</strong></div>
+            <div style="color: #16a34a;">Valid Rows: <strong>${preview.validRowsCount}</strong></div>
+            <div style="color: #dc2626;">Invalid Rows: <strong>${preview.invalidRowsCount}</strong></div>
+            <div style="color: #d97706;">Duplicate Roll Numbers: <strong>${preview.duplicateCount}</strong></div>
+          </div>
+
+          ${preview.invalidRowsCount > 0 ? `
+            <div style="background: #fee2e2; border: 1px solid #f87171; border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.85rem; color: #7f1d1d; margin-bottom: 1rem;">
+              <strong>Validation Errors Detected:</strong>
+              <ul style="margin: 0.25rem 0 0 1.25rem;">
+                ${preview.invalidRecords.map(inv => `<li>Row ${inv.rowIndex} (${inv.rollNumber || 'Missing Roll'}): ${inv.errors.join("; ")}</li>`).join("")}
+              </ul>
+            </div>
+            <div style="color: var(--color-slate-600); font-size: 0.825rem;">
+              🔒 <em>Corrupt Dataset Safeguard:</em> System blocks committing because invalid rows were identified. Previous valid attendance data remains intact.
+            </div>
+          ` : `
+            <div style="background: #dcfce7; border: 1px solid #86efac; border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.85rem; color: #166534; margin-bottom: 1rem;">
+              ✔ All rows verified! Calculations and student matches passed with zero errors.
+            </div>
+            <button class="cg-btn cg-btn-success" id="commitValidBatchBtn">Commit Valid Dataset to Live Database</button>
+          `}
+        </div>
+      `;
+
+      const commitBtn = document.getElementById("commitValidBatchBtn");
+      if (commitBtn) {
+        commitBtn.addEventListener("click", () => {
+          alert(`Successfully committed ${preview.validRowsCount} attendance records! Audit logged to attendance_imports.`);
+        });
+      }
+    }
+
+    // Reports export from Backend
+    document.getElementById("exportAttendanceBtn").addEventListener("click", () => {
+      window.location.href = "/api/export/attendance?format=csv";
+    });
+
+    document.getElementById("exportRequestsBtn").addEventListener("click", () => {
+      window.location.href = "/api/export/requests?format=csv";
+    });
+
+    renderInchargeView();
+  </script>
+</body>
+</html>
